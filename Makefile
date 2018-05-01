@@ -1,6 +1,6 @@
 COMMON_SOURCES=taliforth.asm definitions.asm native_words.asm headers.asm strings.asm forth_words.asc user_words.asc
 
-all: taliforth-py65mon.bin
+all: taliforth-py65mon.bin taliforth-chochi-e.bin
 
 taliforth-%.bin: platform-%.asm $(COMMON_SOURCES)
 	ophis -l docs/$*-listing.txt \
