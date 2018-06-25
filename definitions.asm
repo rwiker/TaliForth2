@@ -1,7 +1,7 @@
 ; Definitions for Tali Forth 2
 ; Scot W. Stevenson <scot.stevenson@gmail.com>
 ; First version: 01. Apr 2016 (Liara Forth)
-; This version: 11. Mar 2018
+; This version: 06. Jun 2018
 
 ; This file is included by taliforth.asm
 
@@ -12,8 +12,11 @@
 
 ; MEMORY MAP OF RAM
 
-; Drawing is not only very ugly, but also not to scale. See docs/memorymap.txt
-; for the complete memory map
+; Drawing is not only very ugly, but also not to scale. See the manual for 
+; details on the memory map. Note that some of the values are hard-coded in
+; the testing routines, especially the size of the input history buffer, the
+; offset for PAD, and the total RAM size. If these are changed, the tests will
+; have to be changed as well
 
 
 ;    $0000  +-------------------+  ram_start, zpage, user0
@@ -46,7 +49,15 @@
 ;   (...)   ~~~~~~~~~~~~~~~~~~~~~  <-- cp
 ;           |                   |
 ;           |                   |
-;    $7fff  +-------------------+  ram_end, code0-1
+;           |                   |
+;           |                   |
+;           |                   |
+;           |                   |
+;    $7C00  +-------------------+  hist_buff, cp_end
+;           |   Input History   |
+;           |    for ACCEPT     |
+;           |  8x128B buffers   |
+;    $7fff  +-------------------+  ram_end
 
 
 ; HARD PHYSICAL ADDRESSES
@@ -56,10 +67,11 @@
 ; these for easier comparisons with Liara Forth's structure and to 
 ; help people new to these things.
 
-.alias ram_start $0000       ; start of installed 32 KiB of RAM
-.alias ram_end   $8000-1     ; end of installed RAM
-.alias zpage     ram_start   ; begin of Zero Page ($0000-$00ff)
-.alias stack0    $0100       ; begin of Return Stack ($0100-$01ff)
+.alias ram_start $0000          ; start of installed 32 KiB of RAM
+.alias ram_end   $8000-1        ; end of installed RAM
+.alias zpage     ram_start      ; begin of Zero Page ($0000-$00ff)
+.alias stack0    $0100          ; begin of Return Stack ($0100-$01ff)
+.alias hist_buff ram_end-$03ff  ; begin of history buffers
 
 
 ; SOFT PHYSICAL ADDRESSES
@@ -69,12 +81,11 @@
 ; variables user0. 
 
 .alias user0     zpage          ; user and system variables
-.alias dsp0      $78            ; initial Data Stack Pointer, see docs/stack.md
 .alias rsp0      $ff            ; initial Return Stack Pointer (65c02 stack)
 .alias bsize     $ff            ; size of input/output buffers
 .alias buffer0   stack0+$100    ; input buffer ($0200-$027f)
 .alias cp0       buffer0+bsize  ; Dictionary starts after last buffer
-.alias cp_end    code0-1        ; Last RAM byte available
+.alias cp_end    hist_buff      ; Last RAM byte available for code
 .alias padoffset $ff            ; offset from CP to PAD (holds number strings)
 
 
@@ -89,7 +100,8 @@
 
 .alias cp        user0+0  ; Compiler Pointer
 .alias dp        user0+2  ; Dictionary Pointer
-.alias workword  user0+4  ; nt (not xt!) of word being compiled
+.alias workword  user0+4  ; nt (not xt!) of word being compiled, except in
+                          ; a :NONAME declared word (see status)
 .alias insrc     user0+6  ; input Source for SOURCE-ID
 .alias cib       user0+8  ; address of current input buffer
 .alias ciblen    user0+10  ; length of current input buffer
@@ -110,11 +122,24 @@
 .alias tmptos    user0+40  ; temporary TOS storage
 .alias tohold    user0+42  ; pointer for formatted output 
 .alias scratch   user0+44  ; 8 byte scratchpad (see UM/MOD)
+.alias status    user0+52  ; internal status information
+                           ; (used by : :NONAME ; ACCEPT)
+                           ; Bit 6 = 1 for normal ":" definitions
+                           ;         WORKWORD contains nt of word being compiled
+                           ;       = 0 for :NONAME definitions
+                           ;         WORKWORD contains xt of word being compiled
+                           ; Bit 3 = 1 makes CTRL-n recall current history
+                           ;       = 0 CTRL-n recalls previous history
+                           ; Bit 2 = Current history buffer msb
+                           ; Bit 1 = Current history buffer (0-7, wraps)
+                           ; Bit 0 = Current history buffer lsb
+                           ; status+1 is used by ACCEPT to hold history lengths.
+                
+; Bytes used for variables: 54 ($0000-$0035) 
+; First usable Data Stack location: $0036 (decimal 54) 
+; Bytes avaible for Data Stack: 128-54 = 65 --> 32 16-bit cells
 
-; Last address used for variables:   0052 ($0034)
-; First usable Data Stack location: $0077  (0119)
-; Bytes avaible for Data Stack: 67 --> 33 16-bit cells
-
+.alias dsp0      $78            ; initial Data Stack Pointer, see docs/stack.md
 
 ; ASCII CHARACTERS
 
@@ -126,7 +151,9 @@
 .alias AscESC  $1b  ; escape
 .alias AscSP   $20  ; space
 .alias AscDEL  $7f  ; delete (CTRL-h)
-
+.alias AscCP   $10  ; CTRL-p (used to recall previous input history)
+.alias AscCN   $0e  ; CTRL-n (used to recall next input history)
+    
 
 ; DICTIONARY FLAGS
 

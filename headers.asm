@@ -1,7 +1,7 @@
 ; Dictionary Headers for Tali Forth 2
 ; Scot W. Stevenson <scot.stevenson@gmail.com>
 ; First version: 05. Dec 2016 (Liara Forth)
-; This version: 16. Apr 2018
+; This version: 26. June 2018
 
 ; Dictionary headers are kept separately from the code, which allows various
 ; tricks in the code. We roughly follow the Gforth terminology: The Execution
@@ -77,9 +77,14 @@ nt_find:
         .word nt_word, xt_find, z_find
         .byte "find"
 
+nt_disasm:
+        .byte 6, UF
+        .word nt_find, xt_disasm, z_disasm
+        .byte "disasm"
+
 nt_dot_s:
         .byte 2, 0
-        .word nt_find, xt_dot_s, z_dot_s
+        .word nt_disasm, xt_dot_s, z_dot_s
         .byte ".s"
 
 nt_dump:
@@ -198,7 +203,7 @@ nt_move:
         .byte "move"
 
 nt_backslash:
-        .byte 1, 0
+        .byte 1, IM
         .word nt_move,  xt_backslash, z_backslash
         .byte $5c
 
@@ -212,14 +217,9 @@ nt_sm_slash_rem:
         .word nt_fm_slash_mod, xt_sm_slash_rem, z_sm_slash_rem
         .byte "sm/rem"
 
-nt_ud_slash_mod:
-        .byte 6, UF
-        .word nt_sm_slash_rem, xt_ud_slash_mod, z_ud_slash_mod
-        .byte "ud/mod"
-
 nt_um_slash_mod:
         .byte 6, UF
-        .word nt_ud_slash_mod, xt_um_slash_mod, z_um_slash_mod
+        .word nt_sm_slash_rem, xt_um_slash_mod, z_um_slash_mod
         .byte "um/mod"
 
 nt_star:
@@ -437,9 +437,14 @@ nt_compile_comma:
         .word nt_left_bracket, xt_compile_comma, z_compile_comma
         .byte "compile,"
 
+nt_colon_noname:
+        .byte 7, 0
+        .word nt_compile_comma, xt_colon_noname, z_colon_noname
+        .byte ":noname"
+
 nt_semicolon:
         .byte 1, CO+IM
-        .word nt_compile_comma, xt_semicolon, z_semicolon
+        .word nt_colon_noname, xt_semicolon, z_semicolon
         .byte ";"
 
 nt_colon:
@@ -552,9 +557,14 @@ nt_s_to_d:
         .word nt_d_to_s, xt_s_to_d, z_s_to_d
         .byte "s>d"
 
+nt_to:
+        .byte 2, NN+IM
+        .word nt_s_to_d, xt_to, z_to
+        .byte "to"
+
 nt_value:               ; same code as CONSTANT
-        .byte 5, 0
-        .word nt_s_to_d, xt_constant, z_constant
+        .byte 5, UF
+        .word nt_to, xt_constant, z_constant
         .byte "value"
 
 nt_constant:
@@ -672,9 +682,19 @@ nt_two_variable:
         .word nt_two_r_fetch, xt_two_variable, z_two_variable
         .byte "2variable"
 
+nt_two_fetch:
+        .byte 2, UF
+        .word nt_two_variable, xt_two_fetch, z_two_fetch
+        .byte "2@"
+
+nt_two_store:
+        .byte 2, UF
+        .word nt_two_fetch, xt_two_store, z_two_store
+        .byte "2!"
+
 nt_two_over:
         .byte 5, UF
-        .word nt_two_variable, xt_two_over, z_two_over
+        .word nt_two_store, xt_two_over, z_two_over
         .byte "2over"
 
 nt_two_swap:
@@ -722,9 +742,15 @@ nt_greater_than:
         .word nt_zero_equal, xt_greater_than, z_greater_than
         .byte ">"
 
+nt_u_less_than:
+        .byte 2, UF
+        .word nt_greater_than, xt_u_less_than, z_u_less_than
+        .byte "u<"
+
+
 nt_less_than:
         .byte 1, UF
-        .word nt_greater_than, xt_less_than, z_less_than
+        .word nt_u_less_than, xt_less_than, z_less_than
         .byte "<"
 
 nt_not_equals:
@@ -737,9 +763,14 @@ nt_equal:
         .word nt_not_equals, xt_equal, z_equal
         .byte "="
 
+nt_two_slash:
+        .byte 2, UF
+        .word nt_equal, xt_two_slash, z_two_slash
+        .byte "2/"
+
 nt_two_star:
         .byte 2, UF
-        .word nt_equal, xt_two_star, z_two_star
+        .word nt_two_slash, xt_two_star, z_two_star
         .byte "2*"
 
 nt_one_plus:

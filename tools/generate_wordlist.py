@@ -3,22 +3,22 @@
 # For Tali Forth 2
 # Scot W. Stevenson <scot.stevenson@gmail.com>
 # First version: 21. Nov 2017
-# This version: 16. Apr 2018
+# This version: 21. June 2018
 """Creates a markdown formated list of native words based on the header
-comments in native_words.asm
+comments in native_words.asm. It is called by the Makefile on the top level
 """
 
 import sys
 
-SOURCE = '../native_words.asm'
-LABELS = '../docs/ophis_labelmap.txt'
+SOURCE = 'native_words.asm'
+LABELS = 'docs/py65mon-labelmap.txt'
 MARKER = '; ## '
 
 labels = {}
 
 # Counters for statistics. We just brutally use global variables for these
 not_tested = 0
-
+auto_tested = 0
 
 def get_sizes(label_dict):
     """Use the Ophis labelmap to calculate the length of the native words
@@ -81,7 +81,8 @@ def print_footer(size):
 
     print()
     print('Found **{0}** native words in `native_words.asm`.'.format(size))
-    print('Of those, **{0}** are not marked as "tested".'.format(not_tested))
+    print('Of those, **{0}** were automatically tested and'.format(auto_tested))
+    print('          **{0}** are not marked as tested at all.'.format(not_tested-auto_tested))
     print()
 
 
@@ -103,8 +104,10 @@ def print_line(fl, sl):
     as line one and line two
     """
     global not_tested
+    global auto_tested
 
     HAVE_TEST = 'tested'
+    AUTO_TEST = 'auto'
     TEMPLATE = '| {0} | {1} | {2} | {3} | {4} |'
 
     l1 = fl[len(MARKER):].split()
@@ -124,6 +127,18 @@ def print_line(fl, sl):
     # Statistics
     if status != HAVE_TEST:
         not_tested += 1
+
+    if status == AUTO_TEST:
+        auto_tested +=1
+
+    # We want automatically tested words to be bolded and non-tested words to be
+    # in italics
+    if status == AUTO_TEST:
+        status = '**'+status+'**'
+    elif status == HAVE_TEST:
+        pass
+    else: 
+        status = '*'+status+'*'
 
     print(TEMPLATE.format(name, word, source, size, status))
 

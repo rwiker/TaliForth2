@@ -1,6 +1,6 @@
 \ List of high-level Forth words for Tali Forth 2 for the 65c02
 \ Scot W. Stevenson <scot.stevenson@gmail.com>
-\ This version: 28. Apr 2018
+\ This version: 25. June 2018
 
 \ When changing these words, edit them here and then use the 
 \ forth_to_dotbyte.py tool to convert them to the required format
@@ -19,6 +19,10 @@
         : repeat postpone again here swap ! ; immediate compile-only
         : until postpone 0branch , ; immediate compile-only
         : while postpone 0branch here 0 , swap ; immediate compile-only
+        : case 0 ; immediate compile-only 
+        : of postpone over postpone = postpone if postpone drop ; immediate compile-only 
+        : endof postpone else ; immediate compile-only 
+        : endcase postpone drop begin ?dup while postpone then repeat ; immediate compile-only 
 
 \ DEFER and friends. Code taken from ANSI Forth specification. Some of
 \ these will be moved to assembler code in due course
@@ -48,14 +52,18 @@
         : d.r >r tuck dabs <# #s rot sign #> r> over - spaces type ;
 
 \ Temporary high-level words. TODO convert these to assembler
-        : to ( n -- 'name') ' >body ! ;
-        : within ( n1 n2 n3 -- f ) rot tuck > -rot > invert and ;
+        \ An optional version of WITHIN is ROT TUCK > -ROT > INVERT AND  - this
+        \ is from the Forth Standard, see
+        \ https://forth-standard.org/standard/core/WITHIN
+        : within ( n1 n2 n3 -- f )  over - >r - r> u< ;
+        : 2constant ( d -- ) create swap , , does> dup @ swap cell+ @ ;
+        : 2literal ( d -- ) swap postpone literal postpone literal ; immediate
 
 \ Splash strings. We leave these as high-level words because they are
 \ generated at the end of the boot process and signal that the other
 \ high-level definitions worked (or at least didn't crash)
         .( Tali Forth 2 for the 65c02)
-        cr .( Version ALPHA 28. Apr 2018 )
+        cr .( Version ALPHA 25. June 2018 )
         cr .( Copyright 2014-2018 Scot W. Stevenson)
         cr .( Tali Forth 2 comes with absolutely NO WARRANTY)
         cr .( Type 'bye' to exit) cr

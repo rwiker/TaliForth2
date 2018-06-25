@@ -1,5 +1,6 @@
 % Internals of Tali Forth 2
 % Scot W. Stevenson 
+% This version: 13. June 2018
 % ---------------------------------------
 \section{Stack}\index{stack|textbf}
 
@@ -226,7 +227,6 @@ string and only the string, the compilation of the Forth words worked.
 % ---------------------------------------
 \section{Memory Map}\index{memory map|textbf}
 
-
 Tali Forth 2 was developed with a simple 32 KiB RAM\index{RAM}, 32 KiB
 ROM\index{ROM} design. 
 
@@ -258,6 +258,9 @@ ROM\index{ROM} design.
           ~~~~~~~~~~~~~~~~~~~~~  <-- cp
           |                   |
           |                   |
+          +-------------------+     
+          |                   |
+          | ACCEPT history    | 
           |                   |
    $7FFF  #####################  ram_end
    $8000  |                   |  forth, code0
@@ -282,6 +285,9 @@ ROM\index{ROM} design.
    $FFFF  +-------------------+     
 \end{lstlisting}
 
+Note that some of these values are hard-coded into the test\index{testing}
+suite; see the file \texttt{definitions.txt} for details.
+
 \pagebreak
 
 % ---------------------------------------
@@ -305,6 +311,10 @@ case, we use SOURCE-ID to find out where input is coming from: 0 for the
 keyboard, \texttt{-1 (\$FFFF)} for a string in memory, and a number \texttt{n}
 for a file-id\index{file-id}. Since Tali currently doesn't support blocks, we
 can skip the \texttt{blk} instruction and go right to \texttt{source-id}. 
+
+One gotcha with Tali Forth's input is that current it only sees spaces, but not
+other whitespace, as delimiters. This means that Forth text files that are fed
+to Tali should not contain tabs. This behavior might be changed in the future.
 
 
 \subsection{Starting up}\index{booting}
@@ -899,3 +909,37 @@ z_to_r:         rts
 \noindent This word has \textit{both} native compile stripping and underflow
 detection. However, both can be removed from newly native code words, leaving
 only the eight byte core of the word to be compiled.
+
+% ---------------------------------------
+\section{\texttt{cmove, cmove>} and \texttt{move}}
+
+The three moving words \texttt{cmove}\index{cmove@\texttt{cmove}},
+\texttt{cmove>}\index{cmove>@\texttt{cmove>}}, and
+\texttt{move}\index{move@\texttt{move}} show subtle differences that can trip up
+new users and are reflected by different code under the hood. \texttt{cmove} and
+\texttt{cmove>} are the traditional Forth words that work on characters (which
+in the case of Tali Forth are bytes), whereas \texttt{move} is a more modern
+word that works on address units (which in our case is also bytes). 
+
+If the source and destination regions show no overlap, all three words work the
+same. However, if there is overlap, \texttt{cmove} and \texttt{cmove>}
+demonstrate a behavior called ``propagation''\index{propagation} or
+``clobbering''\index{clobbering}: Some of the characters are overwritten.
+\texttt{move} does not show this behavior. This example shows the difference:
+
+\begin{lstlisting}[frame=lines]
+create testbuf char a c, char b c, char c c, char d c,  ( ok ) 
+testbuf 4 type ( abcd ok ) 
+testbuf dup char+ 3 cmove  ( ok )
+testbuf 4 type ( aaaa ok )
+\end{lstlisting}
+
+Note the propagation in the result. \texttt{move}, however, doesn't propagate.
+The last two lines would be:
+
+\begin{lstlisting}[frame=lines]
+testbuf dup char+ 3 move  ( ok )
+testbuf 4 type ( aabc ok )
+\end{lstlisting}
+
+In practice, \texttt{move} is usually what you want to use.

@@ -1,3 +1,4 @@
+% Developing Tali Forth 2
 
 \begin{quote}
         Programming computers can be crazy-making.
@@ -8,11 +9,44 @@
 
 
 
-\section{Adding new words}
+\section{Adding new words}\index{words, adding}
 
-The easiest way to add new words to Tali Forth is to include them in the file
-\texttt{forth\_code/user\_words.fs}. 
+The simplest way to add new words to Tali Forth is to include them in the file
+\texttt{forth\_code/user\_words.fs}. This is the place to put them for personal
+use. 
 
+To add words to the permament set, it is best to start a pull request\index{pull
+request} on the GitHub\index{GitHub} page of Tali Forth. The use of
+git\index{git} and GitHub is beyond the scope of this document -- we'll just
+point out it they are not as complicated as they look, and the make
+experimenting a lot easier.
+
+Internally, Tali Forth 2 tends to follow a sequence of steps for new words:
+\begin{itemize}
+
+        \item If it is an ANSI\index{ANSI Forth} Forth word, review the standard
+                online. In some cases, there is a reference implementation that
+                can be used.
+        \item Otherwise, check other sources for a high-level realization of the
+                word. This can be Jonesforth\index{Jonesforth} or
+                Gforth\index{Gforth}. A direct copy is usually not possible (or
+                legally allowed, given different licenses), but gives hints for
+                a Tali Forth version of the word.
+        \item After the new word has been tested interactively, add a high-level
+                version to the file \texttt{forth\_code/forth\_words.fs}. 
+        \item Add tests for the new word to the test suite. Ideally, there will
+                be tests code included in the ANSI\index{ANSI Forth} specification.
+        \item If appropriate, convert the word to assembler, adding an entry to
+                \texttt{headers.asm} and the code itself to
+                \texttt{native\_words.asm}. In this first step, it will usually
+                be a simple sequence of \texttt{JSR} subroutine jumps to the
+                existing native Forth words.
+        \item If appropriate, rewrite all or some of the subroutine jumps in
+                direct assembler.
+\end{itemize}
+
+Note that if you are contributing code, feel free to happily ignore this
+sequence and just submit whatever is working. 
 
 \section{Deeper changes}
 
@@ -35,15 +69,17 @@ use the link provided above. For Linux\index{Linux}:
 
 \begin{lstlisting}[frame=lines]
         git clone https://github.com/michaelcmartin/Ophis
-        cd src
+        cd Ophis/src
         sudo python setup.py install
 \end{lstlisting}
 
-Switch to the folder where the Tali code lives, and assemble with the primitive
-shell script provided: \texttt{./assemble.sh} The script also automatically
-updates the file listings in the \texttt{docs} folder. Note that Ophis will not
-accept math operation characters in label names because it will try to perform
-those operations. Because of this, we use underscores for label names.
+Switch to the folder where the Tali code lives, and run the Makefile with a
+simple \texttt{make} command. This also updates the file listings in the
+\texttt{docs} folder. 
+
+Ophis has some quirks. For instance, you cannot use math symbols in label names,
+because it will try to perform those operations. Use underscores for label names
+instead.
 
 \subsection{General notes}
 
@@ -102,13 +138,6 @@ I work with the following rules:
                 both to Forth and 6502 assembler.
 
 \end{itemize}
-
-
-\section{Testing}\index{testing}
-
-There is no automatic or formal test suite available at this time, and due to
-space considerations, there probably never will be. This manual includes a list
-of test cases that can be applied by hand in the appendix.
 
 
 \section{Code Cheat Sheet}\index{cheat sheet, code}
