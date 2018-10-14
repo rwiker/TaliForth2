@@ -1,7 +1,7 @@
 ; Dictionary Headers for Tali Forth 2
 ; Scot W. Stevenson <scot.stevenson@gmail.com>
 ; First version: 05. Dec 2016 (Liara Forth)
-; This version: 26. June 2018
+; This version: 26. Aug 2018
 
 ; Dictionary headers are kept separately from the code, which allows various
 ; tricks in the code. We roughly follow the Gforth terminology: The Execution
@@ -39,8 +39,9 @@
 ;       NN - Never Native Compile (must always be called by JSR)
 ;       AN - Always Native Compile (may not be called by JSR)
 ;       UF - Contains underflow check
+;       HC - Has CFA (words created by CREATE and DOES> only)
 
-; Note there are currently three bits unused. By default, all words can be
+; Note there are currently two bits unused. By default, all words can be
 ; natively compiled (compiled inline) or as a subroutine jump target; the system
 ; decides which variant to use based on a threshold the user can set. The NN
 ; flag forbids native compiling, the AN flag forces it.  
@@ -77,9 +78,24 @@ nt_find:
         .word nt_word, xt_find, z_find
         .byte "find"
 
+nt_environment_q:
+        .byte 12, UF 
+        .word nt_find, xt_environment_q, z_environment_q
+        .byte "environment?"
+
+nt_search:  
+        .byte 6, UF
+        .word nt_environment_q, xt_search, z_search
+        .byte "search"
+
+nt_compare:
+        .byte 7, UF
+        .word nt_search, xt_compare, z_compare
+        .byte "compare"
+
 nt_disasm:
         .byte 6, UF
-        .word nt_find, xt_disasm, z_disasm
+        .word nt_compare, xt_disasm, z_disasm
         .byte "disasm"
 
 nt_dot_s:
@@ -182,9 +198,14 @@ nt_to_in:
         .word nt_less_number_sign, xt_to_in, z_to_in
         .byte ">in"
 
+nt_within:
+        .byte 6, UF
+        .word nt_to_in, xt_within, z_within
+        .byte "within"
+
 nt_pad:
         .byte 3, 0
-        .word nt_to_in, xt_pad, z_pad
+        .word nt_within, xt_pad, z_pad
         .byte "pad"
 
 nt_cmove:
@@ -204,12 +225,37 @@ nt_move:
 
 nt_backslash:
         .byte 1, IM
-        .word nt_move,  xt_backslash, z_backslash
+        .word nt_move, xt_backslash, z_backslash
         .byte $5c
+
+nt_star_slash:
+        .byte 2, UF
+        .word nt_backslash, xt_star_slash, z_star_slash
+        .byte "*/"
+
+nt_star_slash_mod:
+        .byte 5, UF
+        .word nt_star_slash, xt_star_slash_mod, z_star_slash_mod
+        .byte "*/mod"
+
+nt_mod:
+        .byte 3, UF
+        .word nt_star_slash_mod, xt_mod, z_mod
+        .byte "mod"
+
+nt_slash_mod:
+        .byte 4, UF
+        .word nt_mod, xt_slash_mod, z_slash_mod
+        .byte "/mod"
+
+nt_slash:
+        .byte 1, UF
+        .word nt_slash_mod, xt_slash, z_slash
+        .byte "/"
 
 nt_fm_slash_mod:
         .byte 6, UF
-        .word nt_backslash, xt_fm_slash_mod, z_fm_slash_mod
+        .word nt_slash, xt_fm_slash_mod, z_fm_slash_mod
         .byte "fm/mod"
 
 nt_sm_slash_rem:
@@ -608,7 +654,7 @@ nt_unused:
         .byte "unused"
 
 nt_accept:
-        .byte 6, UF
+        .byte 6, UF+NN
         .word nt_unused, xt_accept, z_accept
         .byte "accept"
 
@@ -742,11 +788,15 @@ nt_greater_than:
         .word nt_zero_equal, xt_greater_than, z_greater_than
         .byte ">"
 
+nt_u_greater_than:
+        .byte 2, UF
+        .word nt_greater_than, xt_u_greater_than, z_u_greater_than
+        .byte "u>"
+
 nt_u_less_than:
         .byte 2, UF
-        .word nt_greater_than, xt_u_less_than, z_u_less_than
+        .word nt_u_greater_than, xt_u_less_than, z_u_less_than
         .byte "u<"
-
 
 nt_less_than:
         .byte 1, UF

@@ -14,10 +14,11 @@
 \ THE RANGE OF SIGNED NUMBERS IS -2^(N-1) ... 2^(N-1)-1 AND
 \ THE RANGE OF UNSIGNED NUMBERS IS 0 ... 2^(N)-1.
 \ I HAVEN'T FIGURED OUT HOW TO TEST KEY, QUIT, ABORT, OR ABORT"...
-\ I ALSO HAVEN'T THOUGHT OF A WAY TO TEST ENVIRONMENT?...
 
 testing core words
 hex
+
+marker core_tests
 
 \ ------------------------------------------------------------------------
 testing basic assumptions
@@ -97,7 +98,7 @@ testing 2* 2/ lshift rshift
 { msb 1 rshift 2* -> msb }
 
 \ ------------------------------------------------------------------------
-testing comparisons: true false 0= = <> 0< < > u< min max within
+testing comparisons: true false 0= 0<> = <> 0< 0> < > u< min max within
 0 invert  constant max-uint
 0 invert 1 rshift  constant max-int
 0 invert 1 rshift invert  constant min-int
@@ -121,6 +122,14 @@ testing comparisons: true false 0= = <> 0< < > u< min max within
 { min-int 0= -> <false> }
 { max-int 0= -> <false> }
 
+{ 0 0<> -> <false> }
+{ 1 0<> -> <true> }
+{ 2 0<> -> <true> }
+{ -1 0<> -> <true> }
+{ max-uint 0<> -> <true> }
+{ min-int 0<> -> <true> }
+{ max-int 0<> -> <true> }
+
 { 0 0 = -> <true> }
 { 1 1 = -> <true> }
 { -1 -1 = -> <true> }
@@ -142,6 +151,12 @@ testing comparisons: true false 0= = <> 0< < > u< min max within
 { min-int 0< -> <true> }
 { 1 0< -> <false> }
 { max-int 0< -> <false> }
+
+{ 0 0> -> <false> }
+{ -1 0> -> <false> }
+{ min-int 0> -> <false> }
+{ 1 0> -> <true> }
+{ max-int 0> -> <true> }
 
 { 0 1 < -> <true> }
 { 1 2 < -> <true> }
@@ -189,6 +204,19 @@ testing comparisons: true false 0= = <> 0< < > u< min max within
 { mid-uint 0 u< -> <false> }
 { max-uint 0 u< -> <false> }
 { max-uint mid-uint u< -> <false> }
+
+{ 1 0 u> -> <true> }
+{ 2 1 u> -> <true> }
+{ mid-uint 0 u> -> <true> }
+{ max-uint 0 u> -> <true> }
+{ max-uint mid-uint u> -> <true> }
+{ 0 0 u> -> <false> }
+{ 1 1 u> -> <false> }
+{ 0 1 u> -> <false> }
+{ 1 2 u> -> <false> }
+{ 0 mid-uint u> -> <false> }
+{ 0 max-uint u> -> <false> }
+{ mid-uint max-uint u> -> <false> }
 
 { 0 1 min -> 0 }
 { 1 2 min -> 1 }
@@ -253,7 +281,8 @@ testing comparisons: true false 0= = <> 0< < > u< min max within
 { max-int min-int max-int within -> <false> }
 
 \ ------------------------------------------------------------------------
-testing stack ops: 2drop 2dup 2over 2swap ?dup depth drop dup nip over rot -rot swap 
+testing stack ops: 2drop 2dup 2over 2swap ?dup depth drop dup nip over rot -rot 
+testing stack ops: swap tuck pick
 
 { 1 2 2drop -> }
 { 1 2 2dup -> 1 2 1 2 }
@@ -274,6 +303,15 @@ testing stack ops: 2drop 2dup 2over 2swap ?dup depth drop dup nip over rot -rot 
 { 1 2 3 -rot -> 3 1 2 }
 { 1 2 swap -> 2 1 }
 
+\ There is no formal ANS test for TUCK, this added 01. July 2018
+{ 2 1 tuck -> 1 2 1 }
+
+\ There is no formal ANS test for PICK, this added 01. July 2018
+\ Note that ANS's PICK is different from FIG Forth PICK
+{ 1      0 pick -> 1 1 }    \ Defined by standard: 0 PICK is same as DUP
+{ 1 2    1 pick -> 1 2 1 }  \ Defined by standard: 1 PICK is same as OVER
+{ 1 2 3  2 pick -> 1 2 3 1 }
+
 \ ------------------------------------------------------------------------
 testing >r r> r@ 2>r 2r> 2r@
 
@@ -283,7 +321,7 @@ testing >r r> r@ 2>r 2r> 2r@
 { 123 gr2 -> 123 }
 { 1s gr1 -> 1s } \ return stack holds cells
 
-\ There are no official ANSI tests for 2>R, 2R>, or 2R@, added 22. June 2018
+\ There are no official ANS tests for 2>R, 2R>, or 2R@, added 22. June 2018
 { : gr3 2>r 2r> ; -> }
 { : gr4 2>r 2r@ 2r> 2drop ; -> }
 { : gr5 2>r r> r> ; } \ must reverse sequence, as 2r> is not r> r> 
@@ -598,13 +636,19 @@ ifsym     : t*/    t*/mod swap drop ;
 \ ------------------------------------------------------------------------
 testing here , @ ! cell+ cells c, c@ c! char+ chars 2@ 2! align aligned +! allot pad unused compile,
 
+decimal
 here 1 allot
 here
+9 allot                     \ Growing by 9 and shrinking
+-10 allot                    \ by 10 should bring us back
+here                        \ to where we started.
+constant 3rda
 constant 2nda
 constant 1sta
 { 1sta 2nda u< -> <true> }  \ here must grow with allot ...
 { 1sta 1+ -> 2nda }         \ ... by one address unit
-( TODO missing test: negative allot )
+{ 3rda -> 1sta }            \ and shrink back to the beginning.
+hex
 
 here 1 ,
 here 2 ,
@@ -674,7 +718,6 @@ constant a-addr  constant ua-addr
 ( here + unused + buffer size must be total RAM, that is, $7FFF )
 { pad here - -> FF } \ PAD must have offset of $FF
 { here unused + 3FF + -> 7FFF }
-
 
 :noname dup + ; constant dup+ 
 { : q dup+ compile, ; -> } 
@@ -953,6 +996,14 @@ testing defining words: : ; constant variable create does> >body value to
 { does2 -> }
 { cr1 -> 3 }
 
+\ The following test is not part of the original suite, but belongs
+\ to the "weird:" test following it. See discussion at
+\ https://github.com/scotws/TaliForth2/issues/61
+{ : odd: create does> 1 + ; -> }
+{ odd: o1 -> }
+{ ' o1 >body -> here }
+{ o1 -> here 1 + }
+
 { : weird: create does> 1 + does> 2 + ; -> }
 { weird: w1 -> }
 { ' w1 >body -> here }
@@ -1024,7 +1075,8 @@ drop -> 0 } \ blank line return zero-length string
 
 \ ------------------------------------------------------------------------
 testing <# # #s #> hold sign base >number hex decimal
-\
+hex
+
 \ compare two strings.
 : s=  ( addr1 c1 addr2 c2 -- t/f ) 
    >r swap r@ = if \ make sure strings have same length
@@ -1054,6 +1106,7 @@ testing <# # #s #> hold sign base >number hex decimal
 { gp4 -> <true> }
 
 24 constant max-base   \ base 2 .. 36
+max-base .( max-base post def: ) . cr  ( TODO TEST )
 : count-bits
    0 0 invert 
    begin 
@@ -1084,20 +1137,41 @@ count-bits 2* constant #bits-ud  \ number of bits in ud
    loop swap drop ;
 { gp6 -> <true> }
 
-: gp7
-   base @ >r  max-base base !
+
+\ Split up long testing word from ANS Forth in two parts
+\ to figure out what is wrong
+
+\ Test the numbers 0 to 15 in max-base
+: gp7-1
+   base @ >r  
+   max-base base !
    <true>
+
    a 0 do
       i 0 <# #s #>
       1 = swap c@ i 30 + = and and
    loop
-   max-base a do
-      i 0 <# #s #>
-      1 = swap c@ 41 i a - + = and and
-   loop
+   
    r> base ! ;
 
-{ gp7 -> <true> }
+{ gp7-1 -> <true> }
+
+\ Test the numbers 16 to max-base in max-base
+: gp7-2
+   base @ >r  
+   max-base base !
+   <true>
+
+   max-base a do
+      i 0 <# #s #>
+      2dup type cr ( TODO TEST )
+      1 = swap c@ 41 i a - + = and and
+      .s cr ( TODO TEST )
+   loop
+
+   r> base ! ;
+
+{ gp7-2 -> <true> }
 
 \ >number tests
 create gn-buf 0 c,
@@ -1127,17 +1201,19 @@ create gn-buf 0 c,
    <# #s #>
    0 0 2swap >number swap drop  \ return length only
    r> base ! ;
+
 { 0 0 2 gn1 -> 0 0 0 }
 { max-uint 0 2 gn1 -> max-uint 0 0 }
 { max-uint dup 2 gn1 -> max-uint dup 0 }
+
 { 0 0 max-base gn1 -> 0 0 0 }
 { max-uint 0 max-base gn1 -> max-uint 0 0 }
 { max-uint dup max-base gn1 -> max-uint dup 0 }
 
 : gn2 ( -- 16 10 )
    base @ >r  hex base @  decimal base @  r> base ! ;
-{ gn2 -> 10 a }
 
+{ gn2 -> 10 a }
 
 \ ------------------------------------------------------------------------
 testing action-of defer defer! defer@ is
@@ -1181,7 +1257,6 @@ testing action-of defer defer! defer@ is
 { 2 3 defer5 -> 6 }
 { ' + is-defer5 -> } 
 { 1 2 defer5 -> 3 }
-
 
 \ ------------------------------------------------------------------------
 testing fill move
@@ -1257,7 +1332,7 @@ hex
 { output-test -> }
 
 \ ------------------------------------------------------------------------
-testing parse-name marker
+testing parse-name marker erase
 
 \ Careful editing these, whitespace is significant
 { parse-name abcd s" abcd" s= -> <true> } 
@@ -1277,7 +1352,7 @@ testing parse-name marker
 { parse-name-test abcde abcde  
     -> <true> }    \ line with white space
 
-\ There is no official ANSI test for MARKER, added 22. June 2018
+\ There is no official ANS test for MARKER, added 22. June 2018
 \ TODO There is currently no test for FIND-NAME, taking it on faith here
 { variable marker_size -> }
 { unused marker_size ! -> }
@@ -1287,6 +1362,43 @@ testing parse-name marker
 { quarian -> } 
 { parse-name marker_test find-name -> 0 } 
 { marker_size @ unused = -> <true> }
+
+\ There is no official ANS test of ERASE, added 01. July 2018
+{ create erase_test -> }
+{ 9 c, 1 c, 2 c, 3 c, 9 c, -> }
+{ erase_test 1+ 3 erase -> }  \ Erase bytes between 9 
+{ erase_test            c@ 9 = -> <true> }
+{ erase_test 1 chars +  c@ 0 = -> <true> }
+{ erase_test 2 chars +  c@ 0 = -> <true> }
+{ erase_test 3 chars +  c@ 0 = -> <true> }
+{ erase_test 4 chars +  c@ 9 = -> <true> }
+
+
+\ ------------------------------------------------------------------------
+testing environment
+
+\ This is from the ANS Forth specification at 
+\ https://forth-standard.org/standard/core/ENVIRONMENTq but the first
+\ test is commented out because it doesn't seem to make sense
+\ { s" x:deferred" environment? dup 0= xor invert -> <true>  } ( Huh? Why true? )
+{ s" x:notfound" environment? dup 0= xor invert -> <false> }
+
+\ These were added for Tali Forth 10. Aug 2018
+hex
+{ s" /COUNTED-STRING"    environment? ->    7FFF <true> }
+{ s" /HOLD"              environment? ->      FF <true> }
+{ s" /PAD"               environment? ->      54 <true> }
+{ s" ADDRESS-UNIT-BITS"  environment? ->       8 <true> }
+{ s" FLOORED"            environment? -> <false> <true> }
+{ s" MAX-CHAR"           environment? ->      FF <true> }
+{ s" MAX-N"              environment? ->    7FFF <true> }
+{ s" MAX-U"              environment? ->    FFFF <true> }
+{ s" RETURN-STACK-CELLS" environment? ->      80 <true> }
+{ s" STACK-CELLS"        environment? ->      20 <true> }
+
+{ s" MAX-D"  environment? -> 7FFFFFFF. <true> } 
+{ s" MAX-UD" environment? -> FFFFFFFF. <true> }
+decimal
 
 \ ------------------------------------------------------------------------
 testing input: accept
@@ -1301,10 +1413,15 @@ create abuf 80 chars allot
 ;
 
 { accept-test -> }
+Here is some text for accept.
 
 \ ------------------------------------------------------------------------
 testing dictionary search rules
 
 { : gdx   123 ; : gdx   gdx 234 ; -> }
-
 { gdx -> 123 234 }
+
+hex
+\ Free memory used for these tests
+core_tests
+

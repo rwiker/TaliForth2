@@ -1,6 +1,6 @@
 \ List of high-level Forth words for Tali Forth 2 for the 65c02
 \ Scot W. Stevenson <scot.stevenson@gmail.com>
-\ This version: 25. June 2018
+\ This version: 22. Sep 2018
 
 \ When changing these words, edit them here and then use the 
 \ forth_to_dotbyte.py tool to convert them to the required format
@@ -24,21 +24,12 @@
         : endof postpone else ; immediate compile-only 
         : endcase postpone drop begin ?dup while postpone then repeat ; immediate compile-only 
 
-\ DEFER and friends. Code taken from ANSI Forth specification. Some of
+\ DEFER and friends. Code taken from ANS Forth specification. Some of
 \ these will be moved to assembler code in due course
         : defer! >body ! ;
         : defer@ >body @ ;
         : is state @ if postpone ['] postpone defer! else ' defer! then ; immediate
         : action-of state @ if postpone ['] postpone defer@ else ' defer@ then ; immediate
-
-\ High level math definitions. The should be moved to actual 65c02 code
-\ for speed at some point. Note we use SM/REM instead of FM/MOD for most
-\ stuff
-        : / >r s>d r> sm/rem swap drop ;
-        : /mod >r s>d r> sm/rem ;
-        : mod /mod drop ;
-        : */ >r m* r> sm/rem swap drop ;
-        : */mod >r m* r> sm/rem ;
 
 \ Output definitions. Since these usually involve the user, and humans
 \ are slow, these can stay high-level for the moment. However, in this
@@ -52,10 +43,6 @@
         : d.r >r tuck dabs <# #s rot sign #> r> over - spaces type ;
 
 \ Temporary high-level words. TODO convert these to assembler
-        \ An optional version of WITHIN is ROT TUCK > -ROT > INVERT AND  - this
-        \ is from the Forth Standard, see
-        \ https://forth-standard.org/standard/core/WITHIN
-        : within ( n1 n2 n3 -- f )  over - >r - r> u< ;
         : 2constant ( d -- ) create swap , , does> dup @ swap cell+ @ ;
         : 2literal ( d -- ) swap postpone literal postpone literal ; immediate
 
@@ -63,7 +50,7 @@
 \ generated at the end of the boot process and signal that the other
 \ high-level definitions worked (or at least didn't crash)
         .( Tali Forth 2 for the 65c02)
-        cr .( Version ALPHA 25. June 2018 )
+        cr .( Version BETA 10. Oct 2018 )
         cr .( Copyright 2014-2018 Scot W. Stevenson)
         cr .( Tali Forth 2 comes with absolutely NO WARRANTY)
         cr .( Type 'bye' to exit) cr

@@ -1,0 +1,3394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<meta name="keywords" content="forth, 6502, assembler, programming">
+<meta name="author" content="Scot W. Stevenson">
+<title>Manual for Tali Forth 2 for the 65c02</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
+/* Remove comment around @import statement below when using as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
+audio,canvas,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+[hidden],template{display:none}
+script{display:none!important}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+a{background:transparent}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}
+input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.spread{width:100%}
+p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:none}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #ddddd8;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.no-bullet{list-style:none}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite:before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media only screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7;font-weight:bold}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
+.clearfix:after,.float-group:after{clear:both}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
+*:not(pre)>code.nobreak{word-wrap:normal}
+*:not(pre)>code.nowrap{white-space:nowrap}
+pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menu{color:rgba(0,0,0,.8)}
+b.button:before,b.button:after{position:relative;top:-1px;font-weight:400}
+b.button:before{content:"[";padding:0 3px 0 2px}
+b.button:after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header:before,#header:after,#content:before,#content:after,#footnotes:before,#footnotes:after,#footer:before,#footer:after{content:" ";display:table}
+#header:after,#content:after,#footnotes:after,#footer:after{clear:both}
+#content{margin-top:1.25em}
+#content:before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
+#header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span:before{content:"\00a0\2013\00a0"}
+#header .details br+span.author:before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark:before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber:after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #ddddd8;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #efefed;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media only screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}
+@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+.sect1{padding-bottom:.625em}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}
+.sect1+.sect1{border-top:1px solid #efefed}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock>caption.title{white-space:nowrap;overflow:visible;max-width:0}
+.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #ddddd8;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
+.sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
+.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
+.literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}
+@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}
+.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]:before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:#999}
+.listingblock:hover code[data-lang]:before{display:block}
+.listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
+.listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
+table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0;line-height:1.45}
+table.pyhltable td.code{padding-left:.75em;padding-right:0}
+pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
+pre.pygments .lineno{display:inline-block;margin-right:.25em}
+table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
+.quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
+.quoteblock .quoteblock blockquote{padding:0 0 0 .75em}
+.quoteblock .quoteblock blockquote:before{display:none}
+.verseblock{margin:0 1em 1.25em 1em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract{margin:0 0 1.25em 0;display:block}
+.quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
+.quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
+table.tableblock{max-width:100%;border-collapse:separate}
+table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
+table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
+table.grid-cols th.tableblock,table.grid-cols td.tableblock{border-width:0 1px 0 0}
+table.grid-all *>tr>.tableblock:last-child,table.grid-cols *>tr>.tableblock:last-child{border-right-width:0}
+table.grid-rows th.tableblock,table.grid-rows td.tableblock{border-width:0 0 1px 0}
+table.grid-all tbody>tr:last-child>th.tableblock,table.grid-all tbody>tr:last-child>td.tableblock,table.grid-all thead:last-child>tr>th.tableblock,table.grid-rows tbody>tr:last-child>th.tableblock,table.grid-rows tbody>tr:last-child>td.tableblock,table.grid-rows thead:last-child>tr>th.tableblock{border-bottom-width:0}
+table.grid-rows tfoot>tr>th.tableblock,table.grid-rows tfoot>tr>td.tableblock{border-width:1px 0 0 0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot{border-width:1px 0}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+td>div.verse{white-space:pre}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
+ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
+ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
+ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
+ul.inline>li>*{display:block}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
+.colist>table tr>td:last-of-type{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left,.imageblock[style*="float: left"]{margin:.25em .625em 1.25em 0}
+.imageblock.right,.imageblock[style*="float: right"]{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;text-indent:-1.05em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background-color:#00fafa}
+.black{color:#000}
+.black-background{background-color:#000}
+.blue{color:#0000bf}
+.blue-background{background-color:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background-color:#fa00fa}
+.gray{color:#606060}
+.gray-background{background-color:#7d7d7d}
+.green{color:#006000}
+.green-background{background-color:#007d00}
+.lime{color:#00bf00}
+.lime-background{background-color:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background-color:#7d0000}
+.navy{color:#000060}
+.navy-background{background-color:#00007d}
+.olive{color:#606000}
+.olive-background{background-color:#7d7d00}
+.purple{color:#600060}
+.purple-background{background-color:#7d007d}
+.red{color:#bf0000}
+.red-background{background-color:#fa0000}
+.silver{color:#909090}
+.silver-background{background-color:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background-color:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background-color:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background-color:#fafa00}
+span.icon>.fa{cursor:default}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background-color:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]:after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@media print{@page{margin:1.25cm .75cm}
+*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]:after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #ddddd8!important;padding-bottom:0!important}
+.sect1{padding-bottom:0!important}
+.sect1+.sect1{border:0!important}
+#header>h1:first-child{margin-top:1.25rem}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em 0}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span:before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]:before{display:block}
+#footer{background:none!important;padding:0 .9375em}
+#footer-text{color:rgba(0,0,0,.6)!important;font-size:.9em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Manual for Tali Forth 2 for the 65c02</h1>
+<div class="details">
+<span id="author" class="author">Scot W. Stevenson</span><br>
+<span id="email" class="email"><a href="mailto:scot.stevenson@gmail.com">scot.stevenson@gmail.com</a></span><br>
+<span id="revnumber">version BETA,</span>
+<span id="revdate">04. July 2018</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_dedication">Dedication</a></li>
+<li><a href="#_introduction">Introduction</a>
+<ul class="sectlevel1">
+<li><a href="#_but_why">But why?</a>
+<ul class="sectlevel2">
+<li><a href="#_the_big_picture">The Big Picture</a></li>
+<li><a href="#_forth">Forth</a></li>
+<li><a href="#_writing_your_own_forth">Writing Your Own Forth</a></li>
+</ul>
+</li>
+<li><a href="#_overview_of_tali_forth">Overview of Tali Forth</a>
+<ul class="sectlevel2">
+<li><a href="#_design_considerations">Design Considerations</a></li>
+<li><a href="#_deeper_down_the_rabbit_hole">Deeper down the rabbit hole</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_user_guide">User Guide</a>
+<ul class="sectlevel1">
+<li><a href="#_installing_tali_forth">Installing Tali Forth</a>
+<ul class="sectlevel2">
+<li><a href="#_downloading">Downloading</a></li>
+<li><a href="#_running">Running</a></li>
+<li><a href="#_installing_on_your_own_hardware">Installing on Your Own Hardware</a></li>
+</ul>
+</li>
+<li><a href="#_running_tali_forth">Running Tali Forth</a>
+<ul class="sectlevel2">
+<li><a href="#_booting">Booting</a></li>
+<li><a href="#_command_line_history">Command-Line History</a></li>
+<li><a href="#_words">Words</a></li>
+<li><a href="#_native_compiling">Native Compiling</a></li>
+<li><a href="#_underflow_detection">Underflow Detection</a></li>
+<li><a href="#_restarting">Restarting</a></li>
+<li><a href="#_gotchas">Gotchas</a></li>
+</ul>
+</li>
+<li><a href="#_major_components">Major Components</a>
+<ul class="sectlevel2">
+<li><a href="#_editor">Editor</a></li>
+<li><a href="#_assembler">Assembler</a></li>
+<li><a href="#_disassembler">Disassembler</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_developer_guide">Developer Guide</a>
+<ul class="sectlevel1">
+<li><a href="#_how_tali_forth_works">How Tali Forth Works</a>
+<ul class="sectlevel2">
+<li><a href="#_the_data_stack">The Data Stack</a></li>
+<li><a href="#_dictionary">Dictionary</a></li>
+<li><a href="#_input">Input</a></li>
+<li><a href="#_the_words_code_create_code_and_code_does_code">The Words <code>create</code> and <code>does&gt;</code></a></li>
+<li><a href="#_control_flow">Control Flow</a></li>
+<li><a href="#_native_compiling_2">Native Compiling</a></li>
+<li><a href="#_return_stack_special_cases">Return Stack Special Cases</a></li>
+<li><a href="#_underflow_stripping">Underflow Stripping</a></li>
+<li><a href="#__code_cmove_code_code_cmove_code_and_code_move_code"><code>cmove</code>, <code>cmove&gt;</code> and <code>move</code></a></li>
+</ul>
+</li>
+<li><a href="#_developing">Developing</a>
+<ul class="sectlevel2">
+<li><a href="#_adding_new_words">Adding New Words</a></li>
+<li><a href="#_deeper_changes">Deeper Changes</a></li>
+<li><a href="#_code_cheat_sheets">Code Cheat Sheets</a></li>
+</ul>
+</li>
+<li><a href="#_future_and_long_term_plans">Future and Long-Term plans</a></li>
+</ul>
+</li>
+<li><a href="#_appendix">Appendix</a>
+<ul class="sectlevel1">
+<li><a href="#_reporting_problems">Reporting Problems</a></li>
+<li><a href="#_faq">FAQ</a></li>
+<li><a href="#_testing_tali_forth_2">Testing Tali Forth 2</a>
+<ul class="sectlevel2">
+<li><a href="#_user_tests">User Tests</a></li>
+<li><a href="#_cycle_tests">Cycle Tests</a></li>
+<li><a href="#_old_tests">Old Tests</a></li>
+</ul>
+</li>
+<li><a href="#_thanks">Thanks</a></li>
+<li><a href="#_references_and_further_reading">References and Further Reading</a></li>
+<li><a href="#_colophon">Colophon</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Tali Forth 2 is a bare-metal ANS(ish) Forth for the 65c02 8-bit MPU. It aims
+to be, roughly in order of importance, easy to try out (just run the included
+binary), simple (subroutine threading model), specific (for the 65c02 only), and
+standardized (ANS Forth).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_dedication">Dedication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For the crew at 6502.org, who made this possible in more ways than one.</p>
+</div>
+</div>
+</div>
+<h1 id="_introduction" class="sect0">Introduction</h1>
+<div class="sect1">
+<h2 id="_but_why">But why?</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+Forth is well suited to resource-constrained situations. It doesn&#8217;t need lots
+of memory and doesn&#8217;t have much overhead. <a href="#CHM1">[CHM1]</a>
+</blockquote>
+<div class="attribution">
+&#8212; Charles H. Moore<br>
+<cite>redgate Hub 2009</cite>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_big_picture">The Big Picture</h3>
+<div class="paragraph">
+<p>This section provides background information on Forth, the 6502 processor, and
+why anybody would want to combine the two. It can be skipped if you already know
+all those things.</p>
+</div>
+<div class="sect3">
+<h4 id="_the_6502_cpu">The 6502 CPU</h4>
+<div class="paragraph">
+<p>It is a well-established fact that humanity reached the apex of processor design
+with the 6502 in 1976.</p>
+</div>
+<div class="paragraph">
+<p>Created by a team including Chuck Peddle and Bill
+Mensch, it was the engine that powered the 8-bit home
+computer revolution of the 1980s.<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnote_1" title="View footnote.">1</a>]</sup> The
+VIC-20, Commodore PET, Apple II,
+and Atari 800 all used the 6502, among others.</p>
+</div>
+<div id="img_65c02" class="imageblock">
+<div class="content">
+<img src="pics/W65c02.jpg" alt="W65c02">
+</div>
+<div class="title">Figure 1. The 65c02 MPU. Photo: Anthony King, released in the public domain</div>
+</div>
+<div class="paragraph">
+<p>More than 40 years later, the processor is still in production by the
+<a href="http://www.westerndesigncenter.com/wdc/w65c02s-chip.cfm">Western Design
+Center</a>. Apart from commercial uses, there is an active hobbyist scene
+centered on the website <a href="http://6502.org/">6502.org</a>. A
+number of people have built their own 8-bit computers based on this chip and
+the instructions there, including a
+<a href="http://wilsonminesco.com/6502primer/">primer</a> by Garth Wilson. It is for these systems that Tali Forth 2 was created.</p>
+</div>
+<div class="paragraph">
+<p>The most important variant of the 6502 produced today is the
+<a href="https://en.wikipedia.org/wiki/WDC\_65C02">65c02</a>, a CMOS chip with
+some additional instructions. It is for this chip that Tali Forth 2 was written.</p>
+</div>
+<div class="paragraph">
+<p>But why program in 8-bit assembler at all? The 65c02 is fun to work with
+because of its clean instruction set architecture (ISA) This is not the place to explain the joys of assembler.
+The official handbook for the 65c02 is <em>Programming the 65816</em> <a href="#EnL">[EnL]</a>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Garth  Wilson answers this question in greater
+detail as part of his 6502 primer at <a href="http://wilsonminesco.com/6502primer/" class="bare">http://wilsonminesco.com/6502primer/</a> .
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_forth">Forth</h3>
+<div class="quoteblock">
+<blockquote>
+If C gives you enough rope to hang yourself, Forth is a flamethrower crawling with
+cobras. <a href="#EW">[EW]</a>
+</blockquote>
+<div class="attribution">
+&#8212; Elliot Williams<br>
+<cite>Forth: The Hacker's language</cite>
+</div>
+</div>
+<div class="paragraph">
+<p>Forth(Forth is the <em>enfant terrible</em> of programming languages. It was
+invented by Charles "Chuck" H. Moore in the 1960s to do
+work with radio astronomy, way before there were modern operating systems or
+programming languages.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+A brief history of Forth can be found at
+<a href="https://www.forth.com/resources/forth-programming-language" class="bare">https://www.forth.com/resources/forth-programming-language</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As a language for people who actually need to get things done, it lets you run
+with scissors, play with fire, and cut corners until you&#8217;ve turned a square
+into a circle. Forth is not for the faint-hearted: It is trivial, for
+instance, to redefine <code>1</code> as <code>2</code> and <code>true</code> as <code>false</code>. Though you can do really,
+really clever things with few lines of code, the result can be hard for other
+people to understand, leading to the reputation of Forth begin a "write-only
+language". However, Forth excels when you positively, absolutely have to get
+something done with hardware that is really too weak for the job.</p>
+</div>
+<div class="paragraph">
+<p>It should be no surprise that NASA is one of the organizations that
+uses Forth. The <em>Cassini</em> mission to Saturn used a
+<a href="http://www.cpushack.com/2013/02/21/charles-moore-forth-stack-processors/">Forth
+CPU</a>, for instance. It is also perfect for small computers like the 8-bit
+65c02. After a small boom in the 1980s, more powerful computers led to a
+decline of the language. The "Internet of Things" (IOT)  with embedded small processors has led to a certain amount of
+<a href="https://www.embedded.com/design/programming-languages-and-tools/4431133/Go-Forth-">renewed
+interest</a> in the language. It helps that Forth is easy to implement: It is
+stack-based, uses Reverse Polish Notation (RPN)
+and a simple threaded interpreter model.</p>
+</div>
+<div class="paragraph">
+<p>There is no way this document can provide an adequate introduction to Forth.
+There are quite a number of tutorials, however, such as <em>A Beginner&#8217;s Guide to
+Forth</em> by J.V. Nobel <a href="#JVN">[JVN]</a> or the classic (but slightly
+dated) <em>Starting Forth</em> by Leo Brodie.<a href="#LB1">[LB1]</a>
+Gforth, one of the more powerful free Forths, comes with its own
+<a href="http://www.complang.tuwien.ac.at/forth/gforth/Docs-html/Tutorial.html">tutorial</a>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Once you have understood the basics of the language, do yourself a favor
+and read <em>Thinking Forth</em> by Brodie<a href="#LB2">[LB2]</a> which deals with
+the philosophy of the language. Even if you never code a line of Forth in your
+life, exposure to Forth will change the way you think about programming, much
+like Lisp.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_writing_your_own_forth">Writing Your Own Forth</h3>
+<div class="paragraph">
+<p>Even if the 65c02 is great and Forth is brilliant, why got to the effort of
+writing a new, bare-metal version of the languages? After almost 50 years,
+shouldn&#8217;t there be a bunch of Forths around already?</p>
+</div>
+<div class="sect3">
+<h4 id="_fig_forth">FIG Forth</h4>
+<div class="paragraph">
+<p>In fact, the classic Forth available for the whole group of 8-bit MPUs is FIG
+Forth. "FIG" stands for "Forth Interest Group". Ported to various
+architectures, it was original based on an incarnation for the 6502 written by
+Bill Ragsdale and Robert Selzer.
+There are PDFs of the <a href="http://www.forth.org/fig-forth/fig-forth\_6502.pdf">6502
+version</a> from September 1980 freely available&#8201;&#8212;&#8201;there is a tradition of placing
+Forth in the public domain&#8201;&#8212;&#8201;and more than one hobbyist has revised it to his
+machine.</p>
+</div>
+<div class="paragraph">
+<p>However, Forth has changed a lot in the past three decades. There is now a
+standardized version called <a href="https://forth-standard.org/">ANS Forth</a>, which
+includes very basic changes such as how the <code>do</code> loop works. Learning the
+language with FIG Forth is like learning English with <em>The Canterbury
+Tales</em>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_a_modern_forth_for_the_65c02">A Modern Forth for the 65c02</h4>
+<div class="paragraph">
+<p>Tali Forth was created to provide an easy to understand modern Forth written
+especially for the 65c02 that anybody can understand, adapt to their own use,
+and maybe actually work with. As part of that effort, the source code is heavily
+commented. And this document tries to explain the internals in more detail.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_overview_of_tali_forth">Overview of Tali Forth</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_design_considerations">Design Considerations</h3>
+<div class="paragraph">
+<p>When creating a new Forth, there are a bunch of design decisions to be
+made.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Probably the best introduction to these questions is found in "Design
+Decisions in the Forth Kernel" at
+<a href="http://www.bradrodriguez.com/papers/moving1.htm" class="bare">http://www.bradrodriguez.com/papers/moving1.htm</a> by Brad Rodriguez.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Spoiler alert: Tali Forth is a subroutine-threaded (STC) variant with a 16-bit
+cell size and a dictionary that keeps headers and code separate. If you don&#8217;t
+care and just want to use the program, skip ahead.</p>
+</div>
+<div class="sect3">
+<h4 id="_characteristics_of_the_65c02">Characteristics of the 65c02</h4>
+<div class="paragraph">
+<p>Since this is a bare-metal Forth, the most important consideration is the target
+processor. The 65c02 only has one full register, the accumulator A, as well as
+two secondary registers X and Y. All are 8-bit wide. There are 256 bytes that
+are more easily addressable on the Zero Page. A single hardware stack is used
+for subroutine jumps. The address bus is 16 bits wide for a maximum of 64 KiB of
+RAM and ROM.</p>
+</div>
+<div class="paragraph">
+<p>For the default setup, we assume 32 KiB of each, but allow this to be changed so
+people can adapt Tali to their own hardware.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_cell_size">Cell Size</h4>
+<div class="paragraph">
+<p>The 16-bit address bus suggests the cell size should be 16 bits as well. This is
+still easy enough to realize on a 8-bit MPU.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_threading_technique">Threading Technique</h4>
+<div class="paragraph">
+<p>A "thread" in Forth is simply a list of addresses of words to be executed.
+There are four basic threading techniques: <a href="#GK">[GK]</a></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Indirect threading (ITC)</dt>
+<dd>
+<p>The oldest, original variant, used by FIG Forth. All
+other versions are modifications of this model.</p>
+</dd>
+<dt class="hdlist1">Direct threading (DTC)</dt>
+<dd>
+<p>Includes more assembler code to speed things up, but
+slightly larger than ITC.</p>
+</dd>
+<dt class="hdlist1">Token threading (TTC)</dt>
+<dd>
+<p>The reverse of DTC in that it is slower, but uses less
+space than the other Forths. Words are created as a table of tokens.</p>
+</dd>
+<dt class="hdlist1">Subroutine threading (STC)</dt>
+<dd>
+<p>Converts the words to a simple
+series of <code>jsr</code> combinations. Easy to understand and less complex than the other
+variants, but uses more space and is slower.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Our lack of registers and the goal of creating a simple and easy to understand
+Forth makes subroutine threading the most attractive solution. We try to
+mitigate the pain caused by the 12 cycle cost of each and every <code>jsr</code>-<code>rts</code>
+combination by including a relatively high number of native words.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_register_use">Register Use</h4>
+<div class="paragraph">
+<p>The lack of registers&#8201;&#8212;&#8201;and any registers larger than 8 bit at that&#8201;&#8212;&#8201;becomes
+apparent when you realize that Forth classically uses at least four virtual
+registers:</p>
+</div>
+<table class="tableblock frame-all grid-all">
+<caption class="title">Table 1. The classic Forth registers</caption>
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Register</th>
+<th class="tableblock halign-left valign-top">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">W</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Working Register</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interpreter Pointer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DSP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Data Stack Pointer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RSP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return Stack Pointer</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>On a modern processor like a RISC-V RV32I with 32 registers of 32 bit each, none
+of this would be a problem (in fact, we&#8217;d probably run out of ways to use the
+registers). On the 65c02, at least we get the RSP for free with the built-in
+stack pointer. This still leaves three registers. We cut that number down by one
+through subroutine threading, which gets rid of the IP. For the DSP, we use the
+65c02&#8217;s Zero Page indirect addressing mode with the X register. This leaves W,
+which we put on the Zero Page as well.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_data_stack_design">Data Stack Design</h4>
+<div class="paragraph">
+<p>We&#8217;ll go into greater detail on how the Data Stack works in a later chapter
+when we look at the internals. Briefly, the stack is realized on the Zero Page
+for speed. For stability, we provide underflow checks in the relevant words, but
+give the user the option of stripping it out for native compilation. There are
+no checks for overflow because those cases tend to be rare.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dictionary_structure">Dictionary Structure</h4>
+<div class="paragraph">
+<p>Each Forth word consists of the actual code and the header that holds the
+meta-data. The headers are arranged as a simple single-linked list.</p>
+</div>
+<div class="paragraph">
+<p>In contrast to Tali Forth 1, which kept the header and body of the words
+together, Tali Forth 2 keeps them separate. This lets us play various tricks
+with the code to make it more effective.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deeper_down_the_rabbit_hole">Deeper down the rabbit hole</h3>
+<div class="paragraph">
+<p>This concludes our overview of the basic Tali Forth 2 structure. For those
+interested, a later chapter will provide far more detail.</p>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_user_guide" class="sect0">User Guide</h1>
+<div class="sect1">
+<h2 id="_installing_tali_forth">Installing Tali Forth</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_downloading">Downloading</h3>
+<div class="paragraph">
+<p>Tali Forth 2 lives on GitHub at
+<a href="https://github.com/scotws/TaliForth2" class="bare">https://github.com/scotws/TaliForth2</a>. This is where you will always find the
+current version. You can either clone the code with git or simply
+download it. To just test Tali Forth, all you need is the binary file
+<code>taliforth-py65mon.bin</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_running">Running</h3>
+<div class="sect3">
+<h4 id="_downloading_the_py65mon_simulator">Downloading the py65mon Simulator</h4>
+<div class="paragraph">
+<p>Tali was written to run out of the box on the py65mon simulator from
+<a href="https://github.com/mnaberez/py65" class="bare">https://github.com/mnaberez/py65</a>. This is a Python
+program that should run on various operating systems. Py65mon is also required
+for the test suite.</p>
+</div>
+<div class="paragraph">
+<p>To install py65mon on Linux, use the command</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">sudo pip install -U py65</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t have <code>pip</code> installed, you will have to add it first with
+something like <code>sudo apt-get install python-pip</code> (Ubuntu Linux). There is a
+<code>setup.py</code> script as part of the package.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_running_the_binary">Running the Binary</h4>
+<div class="paragraph">
+<p>To start the emulator, run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">py65mon -m 65c02 -r taliforth-py65mon.bin</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the option <code>-m 65c02</code> is required, because Tali Forth makes extensive
+use of the additional commands of the CMOS version and will not run on a stock
+6502 MPU.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_installing_on_your_own_hardware">Installing on Your Own Hardware</h3>
+<div class="paragraph">
+<p>The Tali Forth project started out as a way to run Forth on my own 65c02
+computer, the Übersquirrel. Though it soon developed a life of
+its own, a central aim of the project is to provide a working, modern Forth that
+people can install on their projects.</p>
+</div>
+<div id="img_uebersquirrel" class="imageblock">
+<div class="content">
+<img src="pics/uebersquirrel.jpg" alt="uebersquirrel" width="50%">
+</div>
+<div class="title">Figure 2. The functioning Übersquirrel Mark Zero prototype, August 2013. Photo by Scot W. Stevenson</div>
+</div>
+<div class="paragraph">
+<p>For this to work, you need to create your own kernel code to
+replace <code>platform-py65mon.asm</code>, the default kernel for use with the
+py65mon kernel. By convention, the name should start with
+<code>platform-</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_running_tali_forth">Running Tali Forth</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+One doesn&#8217;t write programs in Forth. Forth is the program.
+</blockquote>
+<div class="attribution">
+&#8212; Charles Moore<br>
+<cite>Masterminds of Programming</cite>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_booting">Booting</h3>
+<div class="paragraph">
+<p>Out of the box, Tali Forth boots a minimal kernel to connect to the
+<code>py65mon</code>  simulator. By default, this stage ends with a line such
+as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Tali Forth 2 default kernel for py65mon (18. Feb 2018)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When you port Tali Forth to your own hardware, you&#8217;ll have to include your own
+kernel (and probably should print out a different line).</p>
+</div>
+<div class="paragraph">
+<p>Tali Forth itself boots next, and after setting up various internal
+things, compiles the high level words. This causes a slight delay, depending on
+the number and length of these words. As the last step, Forth should spit out a
+boot string like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Tali Forth 2 for the 65c02
+Version ALPHA 02. July 2018
+Copyright 2014-2018 Scot W. Stevenson
+Tali Forth 2 comes with absolutely NO WARRANTY
+Type 'bye' to exit</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Because these are the last high-level commands Tali Forth executes, this
+functions as a primitive self-test. If you have modified the high level Forth
+words in either <code>forth_words.fs</code> or <code>user_words.fs</code>, the boot process might
+fail with a variant of the error message "unknown word". The built-in, native
+words should always work. For this <code>dump</code>  is a built-in word&#8201;&#8212;&#8201;it is very
+useful for testing.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_command_line_history">Command-Line History</h3>
+<div class="paragraph">
+<p>Tali&#8217;s command line includes a simple, eight-element history function. To
+access the previous entries, press <code>CONTROL-p</code>, to go forward to the next
+entry, press <code>CONTROL-n</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_words">Words</h3>
+<div class="paragraph">
+<p>Tali Forth comes with the following Forth words out of the
+box:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>see 2literal 2constant within d.r d. ud.r ud. .r u.r */mod */ mod /mod /
+action-of is defer@ defer! endcase endof of case while until repeat else then
+if .( ( drop dup swap ! @ over &gt;r r&gt; r@ nip rot -rot tuck , c@ c! +! execute
+emit type .  u. ? false true space 0 1 2 2dup ?dup + - abs dabs and or xor
+rshift lshift pick char [char] char+ chars cells cell+ here 1- 1+ 2* 2/ = &lt;&gt; &lt;
+u&lt; &gt; 0= 0&lt;&gt; 0&gt; 0&lt; min max 2drop 2swap 2over 2! 2@ 2variable 2r@ 2r&gt; 2&gt;r invert
+negate dnegate c, bounds spaces bl -trailing /string refill accept unused depth
+key allot create does&gt; variable constant value to s&gt;d d&gt;s d- d+ erase blank
+fill find-name ' ['] name&gt;int int&gt;name name&gt;string &gt;body defer latestxt
+latestnt parse-name parse source source-id : ; :noname compile, [ ] 0branch
+branch literal sliteral ." s" postpone immediate compile-only never-native
+always-native nc-limit uf-strip abort abort" do ?do i j loop +loop exit unloop
+leave recurse quit begin again state evaluate base digit? number &gt;number hex
+decimal count m* um* * um/mod sm/rem fm/mod \ move cmove&gt; cmove pad &gt;in &lt;# # #s
+#&gt; hold sign output input cr page at-xy marker words wordsize aligned align
+bell dump .s disasm find word cold bye  ok</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This list might be outdated. To get the current list, run <code>words</code> from
+inside Tali Forth.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Though the list might look unsorted, it actually reflects the priority in the
+dictionary, that is, which words are found first. For instance,
+the native words &#8201;&#8212;&#8201;those coded in assembler&#8201;&#8212;&#8201;always start
+with <code>drop</code> and end with <code>bye</code>. This is the last word that Tali will find in
+the dictionary. <sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnote_2" title="View footnote.">2</a>]</sup> The words before <code>drop</code> are those that are defined in high-level
+Forth. For more information on individual the words, use the <code>see</code> command.</p>
+</div>
+<div class="paragraph">
+<p>Note that the built-in words are lower case.  While Tali is not case sensitive&#8201;&#8212;&#8201;<code>KASUMI</code> is the same word as <code>Kasumi</code> &#8201;&#8212;&#8201;newly defined words will be
+lowercased as they are created and entered into the dictionary.  There is a
+slight speed advantage during lookup to using lowercase words (because Tali
+doesn&#8217;t have to lowercase the entered text), so all of the tests for Tali are
+in lowercase.</p>
+</div>
+<div class="sect3">
+<h4 id="_the_ans_standard">The ANS Standard</h4>
+<div class="paragraph">
+<p>Tali Forth is orientated on ANS Forth, the standard defined by the American
+National Standards Institute (ANSI). Tali also adopted some words from Gforth
+such as <code>bounds</code>. In practical terms, Tali aims to be a subset of Gforth: If a
+program runs on Tali, it should run on Gforth the same way or have a very good
+reason not to.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_tali_specific_words">Tali-Specific Words</h4>
+<div class="paragraph">
+<p>In addition, there are words that are specific to Tali Forth.</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+0branch
+</td>
+<td class="hdlist2">
+<p><code>( f&#8201;&#8212;&#8201;)</code> Branch if zero. Used internally for branching commands such as <code>if</code>.
+In modern Forths, this is usually replaced by <code>cs-pick</code> and <code>cs-roll</code>; Tali Forth
+might switch to these words in the future.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+0
+</td>
+<td class="hdlist2">
+<p><code>(&#8201;&#8212;&#8201;0 )</code> Push the number 0 on the Data Stack.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+1
+</td>
+<td class="hdlist2">
+<p><code>(&#8201;&#8212;&#8201;0 )</code> Push the number 1 on the Data Stack.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+2
+</td>
+<td class="hdlist2">
+<p><code>(&#8201;&#8212;&#8201;0 )</code> Push the number 2 on the Data Stack.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+always-native
+</td>
+<td class="hdlist2">
+<p>Mark last word in dictionary so that it is always natively compiled.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+bell
+</td>
+<td class="hdlist2">
+<p>Ring the terminal bell (ASCII 07).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+branch
+</td>
+<td class="hdlist2">
+<p>Always take branch. See <code>0branch</code>.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+compile-only
+</td>
+<td class="hdlist2">
+<p>Mark last word in dictionary as compile-only.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+digit?
+</td>
+<td class="hdlist2">
+<p><code>( char&#8201;&#8212;&#8201;u f | char f )</code> If character is a digit, convert and set flag to
+<code>true</code>, otherwise return the offending character and a <code>false</code> flag.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+input
+</td>
+<td class="hdlist2">
+<p>Return the address where the vector for the input routine is
+stored (not the vector itself). Used for input redirection for
+<code>emit</code> and others.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+int&gt;name
+</td>
+<td class="hdlist2">
+<p><code>( xt&#8201;&#8212;&#8201;nt )</code> Given the execution execution token (xt), return the
+name token (nt).</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+latestnt
+</td>
+<td class="hdlist2">
+<p><code>(&#8201;&#8212;&#8201;nt )</code> Return the last used name token. The Gforth version of this
+word is called <code>latest</code>.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+nc-limit
+</td>
+<td class="hdlist2">
+<p><code>(&#8201;&#8212;&#8201;addr )</code> Return the address where the threshold value for native
+compiling native compiling is kept. To check the value of this parameter, use <code>nc-limit ?</code>.
+The default value is 20.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+never-native
+</td>
+<td class="hdlist2">
+<p>Mark most recent word so it is never natively compiled.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+number
+</td>
+<td class="hdlist2">
+<p><code>( addr u&#8201;&#8212;&#8201;u | d )</code> Convert a string to a number.  Gforth uses
+<code>s&gt;number?</code> and returns a success flag as well.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+output
+</td>
+<td class="hdlist2">
+<p><code>(&#8201;&#8212;&#8201;addr )</code> Return the address where the vector for the output routine is
+stored (not the vector itself). Used for output redirection for <code>emit</code> and
+others.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+uf-strip
+</td>
+<td class="hdlist2">
+<p><code>(&#8201;&#8212;&#8201;addr)</code> Return the address where the flag is kept that decides
+if the underflow checks are removed during native compiling. To check the value
+of this flag, use <code>uf-strip ?</code>.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+wordsize
+</td>
+<td class="hdlist2">
+<p><code>( nt&#8201;&#8212;&#8201;u )</code> Given the name token (nt) of a Forth word, return its
+size in bytes. Used to help tune native compiling.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_native_compiling">Native Compiling</h3>
+<div class="paragraph">
+<p>As the name says, subroutine threaded code encodes the words as a series of
+subroutine jumps. Because of the overhead caused by these jumps, this can make
+the code slow. Therefore, Tali Forth enables native compiling, where the
+machine code from the word itself is included instead of a subroutine jump. This
+is also called "inlining".</p>
+</div>
+<div class="paragraph">
+<p>The parameter <code>nc-limit</code> sets the limit of how small words have to be to be
+natively compiled. To get the current value (usually 20), check the value of
+the system variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>nc-limit ?</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To set a new limit, save the maximal allowed number of bytes in the machine
+code like any other Forth variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>40 nc-limit !</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To complete turn off native compiling, set this value to zero.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_underflow_detection">Underflow Detection</h3>
+<div class="paragraph">
+<p>When a word tries to access more words on the stack than it is holding, an
+"underflow" error occurs. Whereas Tali Forth 1 didn&#8217;t check
+for these errors, this version does.</p>
+</div>
+<div class="paragraph">
+<p>However, this slows the program down. Because of this, the user can turn off
+underflow detection for words that are natively compiled into new words. To do
+this, set the system variable <code>uf-strip</code> to <code>true</code>. Note this does not turn off
+underflow detection in the built-in words. Also, words with underflow detection
+that are not included in new words through native compiling will also retain
+their tests.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_restarting">Restarting</h3>
+<div class="paragraph">
+<p>Tali Forth has a non-standard word <code>cold</code> that resets the system. This doesn&#8217;t
+erase any data in memory, but just moves the pointers back. When in doubt, you
+might be better off quitting and restarting completely.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gotchas">Gotchas</h3>
+<div class="sect3">
+<h4 id="_cell_size_2">Cell Size</h4>
+<div class="paragraph">
+<p>Tali has a 16-bit cell size.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Use <code>1 cells 8 * .</code> to get the cell size in bits with any Forth.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This can trip up calculations when compared to the <em>de facto</em> standard Gforth
+with 64 bits. Take this example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>( Gforth )      decimal 1000 100 um* hex swap u. u.  ( returns 186a0 0  ok )
+( Tali Forth)   decimal 1000 100 um* hex swap u. u.  ( returns 86a0 1  ok )</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Tali has to use the upper cell of a double-celled number to correctly report
+the result, while Gforth doesn&#8217;t. If the conversion from double to single is
+only via a <code>drop</code> instruction, this will produce different results.</p>
+</div>
+<div class="paragraph">
+<p>There is a similar effect with the Gforth word <code>bounds</code>: Because of Tali&#8217;s 16
+bit address space, it wraps the upper address if we go beyond $FFFF:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>( Gforth )      hex FFFF 2 bounds  swap u. u.  ( returns 10001 ffff  ok  )
+( Tali )        hex FFFF 2 bounds  swap u. u.  ( returns     1 ffff  ok )</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_negative_allot">Negative ALLOT</h4>
+<div class="paragraph">
+<p>The ANSI standard does not define what happens if there is an attempt to free
+more memory with <code>allot</code> by passing a negative value than is available. Tali
+will let the user free memory up the beginning of RAM assigned to the Dictionary
+(marked with <code>cp0</code> in the code), even though this can mean that the Dictionary
+itself is compromised. This is Forth, you&#8217;re the boss.</p>
+</div>
+<div class="paragraph">
+<p>However, any attempt to free more memory than that will set the beginning of RAM
+to <code>cp0</code>. Also, the Dictionary Pointer <code>dp</code> will point to the <em>last native word</em>
+of the Dictionary, which is usually <code>drop</code>. Because of this, the high level
+words defined during boot will <em>not</em> be available. There will be an error
+message to document this. Realistically, you&#8217;ll probably want to restart with
+<code>cold</code> if any of this happens.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_major_components">Major Components</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_editor">Editor</h3>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Currently, there is no editor included. The plan is to include a simple
+line-based editor in the style of <code>ed</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_assembler">Assembler</h3>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Currently, there is no assembler included. The plan is to include a simple
+assembler based on Simpler Assembler Notation (SAN).
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_disassembler">Disassembler</h3>
+<div class="paragraph">
+<p>Tali Forth is currently shipped with a very primitive disassembler, which is
+started with <code>disasm ( addr u&#8201;&#8212;&#8201;)</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="_format">Format</h4>
+<div class="paragraph">
+<p>The output format is in Simpler Assembler Notation (SAN) which adds the mode of
+an instruction to the main mnemonic, simplifying parsing of code. For instance,</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>lda #1
+sta $1000,x
+sta $80
+lda ($80)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>becomes</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>lda.# 1
+sta.x $1000
+sta.z $80
+lda.di $80</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A full discussion of SAN is beyond the scope of this document, see
+<a href="https://docs.google.com/document/d/16Sv3Y-3rHPXyxT1J3zLBVq4reSPYtY2G6OSojNTm4SQ/edit#heading=h.ik059qk0tz7r">this
+link</a> for an overview of the format (currently still under a different name).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_replacing_the_disassembler">Replacing the Disassembler</h4>
+<div class="paragraph">
+<p>Tali was designed to make it easy for the user to swap in a different
+disassembler. The code is in a separate file, <code>disassembler.asm</code>. To replace
+this by your version, move the file to a different name, make sure that it
+accepts <code>( addr u )</code> on the Forth Data Stack as parameters, and start your code
+after the label <code>disassembler:</code>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_developer_guide" class="sect0">Developer Guide</h1>
+<div class="sect1">
+<h2 id="_how_tali_forth_works">How Tali Forth Works</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_the_data_stack">The Data Stack</h3>
+<div class="paragraph">
+<p>Tali Forth uses the lowest part of the top half of the Zero Page for the Data Stack (DS). This leaves the lower half of the Zero Page
+for any kernel stuff the user might require. The DS grows towards the initial
+user variables. See the file <code>definitions.asm</code> for details. Because of the
+danger of underflow, it is recommended that the user kernel&#8217;s
+variables are kept closer to $0100 than to $007F.</p>
+</div>
+<div class="paragraph">
+<p>The X register is used as the Data Stack Pointer (DSP). It
+points to the least significant byte of the current top element of the stack
+("Top of the Stack", TOS).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In the first versions of Tali Forth 1, the DSP pointed to the next <em>free</em>
+element of the stack. The new system makes detecting underflow easier and
+follows the convention in Liara Forth.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Initially, the DSP points to $78, not $7F as might be expected. This provides a
+few bytes as a "floodplain" for underflow. The initial value of
+the DSP is defined as <code>dsp0</code> in the code.</p>
+</div>
+<div class="sect3">
+<h4 id="_single_cell_values">Single Cell Values</h4>
+<div class="paragraph">
+<p>Since the cell size is 16 bits, each stack entry consists of two bytes. They are
+stored little endian (least significant byte first). Therefore, the DSP points
+to the LSB of the current TOS. <sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnote_3" title="View footnote.">3</a>]</sup></p>
+</div>
+<div class="paragraph">
+<p>Because the DSP points to the current top of the stack, the byte it points to
+after boot&#8201;&#8212;&#8201;<code>dsp0</code>&#8201;&#8212;&#8201;will never be accessed: The DSP is decremented first
+with two <code>dex</code> instructions, and then the new value is placed on the stack.
+This means that the initial byte is garbage and can be considered part of the
+floodplain.</p>
+</div>
+<div class="literalblock">
+<div class="title">Snapshot of the Data Stack with one entry as TOS. The DSP has been increased by one and the value written.</div>
+<div class="content">
+<pre>              +--------------+
+              |          ... |
+              +-            -+
+              |              |   ...
+              +-  (empty)   -+
+              |              |  FE,X
+              +-            -+
+        ...   |              |  FF,X
+              +==============+
+       $0076  |           LSB|  00,X   &lt;-- DSP (X Register)
+              +-    TOS     -+
+       $0077  |           MSB|  01,X
+              +==============+
+       $0078  |  (garbage)   |  02,X   &lt;-- DSP0
+              +--------------+
+       $0079  |              |  03,X
+              + (floodplain) +
+       $007A  |              |  04,X
+              +--------------+</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the 65c02 system stack&#8201;&#8212;&#8201;used as the Return Stack (RS) by Tali&#8201;&#8212;&#8201;pushes the MSB on first and then the LSB (preserving little endian), so the
+basic structure is the same for both stacks.</p>
+</div>
+<div class="paragraph">
+<p>Because of this stack design, the second entry ("next on stack", NOS) starts at
+<code>02,X</code> and the third entry ("third on stack", 3OS) at <code>04,X</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_underflow_detection_2">Underflow Detection</h4>
+<div class="paragraph">
+<p>Most native words come with built-in underflow detection. This works by
+comparing the Data Stack Pointer (X) to values that it must be smaller than
+(because the stack grows towards 0000). For instance, to make sure we have one
+element on the stack, we write</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>                cpx #dsp0-1
+                bmi _ok
+                jmp underflow
+_ok:
+                (...)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the most common cases, this gives us:</p>
+</div>
+<table class="tableblock frame-all grid-all">
+<caption class="title">Table 2. DSP values for underflow testing</caption>
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top">Test for</th>
+<th class="tableblock halign-center valign-top">Pointer offset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">one element</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dsp0-1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">two elements</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dsp0-3</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">three elements</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dsp0-5</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">four elements</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>dsp0-7</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Underflow detection adds seven bytes to the words that have it. However, it
+increases the stability of the program. There is an option for stripping it out
+during for user-defined words (see below).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_double_cell_values">Double Cell Values</h4>
+<div class="paragraph">
+<p>The double cell is stored on top of the single cell. Note this places the sign
+bit at the beginning of the byte below the DSP.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>              +---------------+
+              |               |
+              +===============+
+              |            LSB|  $0,x   &lt;-- DSP (X Register)
+              +-+  Top Cell  -+
+              |S|          MSB|  $1,x
+              +-+-------------+
+              |            LSB|  $2,x
+              +- Bottom Cell -+
+              |            MSB|  $3,x
+              +===============+</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Tali Forth does not check for overflow, which in normal operation is too rare
+to justify the computing expense.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dictionary">Dictionary</h3>
+<div class="paragraph">
+<p>Tali Forth follows the traditional model of a Forth dictionary&#8201;&#8212;&#8201;a linked list
+of words terminated with a zero pointer. The headers and code are kept separate
+to allow various tricks in the code.</p>
+</div>
+<div class="sect3">
+<h4 id="_elements_of_the_header">Elements of the Header</h4>
+<div class="paragraph">
+<p>Each header is at least eight bytes long:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>              8 bit     8 bit
+               LSB       MSB
+nt_word -&gt;  +--------+--------+
+         +0 | Length | Status |
+            +--------+--------+
+         +2 | Next Header     | next nt_word
+            +-----------------+
+         +4 | Start of Code   | xt_word
+            +-----------------+
+         +6 | End of Code     | z_word
+            +--------+--------+
+         +8 | Name   |        |
+            +--------+--------+
+            |        |        |
+            +--------+--------+
+            |        |  ...   |
+         +n +--------+--------+</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each word has a <code>name token</code> (nt, <code>nt_word</code> in the code) that points to the
+first byte of the header. This is the length of the word&#8217;s name string, which
+is limited to 255 characters.</p>
+</div>
+<div class="paragraph">
+<p>The second byte in the header (index 1) is the status byte. It is created by
+the flags defined in the file <code>definitions.asm</code>:</p>
+</div>
+<table class="tableblock frame-all grid-all">
+<caption class="title">Table 3. Header flags</caption>
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Flag</th>
+<th class="tableblock halign-left valign-top">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CO</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Compile Only</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IM</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Immediate Word</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Never Native Compile</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always Native Compile</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UF</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Underflow detection</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>HC</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Has Code Field Area (CFA)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Note there are currently two bits unused.</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+CO
+</td>
+<td class="hdlist2">
+<p>This word may only be used inside definitions of new words.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+IM
+</td>
+<td class="hdlist2">
+<p>Word is executed immediately during definitions of new words.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+NN
+</td>
+<td class="hdlist2">
+<p>Word is never inlined. Usually means that the return address from a
+subroutine jump is required for processing.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+AN
+</td>
+<td class="hdlist2">
+<p>Word must always be inlined.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+HC
+</td>
+<td class="hdlist2">
+<p>Consider first three bytes of the word&#8217;s code the Code Field Area (CFA)
+of the word. Used by words defined with <code>create</code> so <code>&gt;body</code> returns
+the correct value.</p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The status byte is followed by the <strong>pointer to the next header</strong> in the linked
+list, which makes it the name token of the next word. A 0000 in this position
+signals the end of the linked list, which by convention is the word <code>bye</code> for
+the native code words.</p>
+</div>
+<div class="paragraph">
+<p>This is followed by the current word&#8217;s <strong>execution token</strong> (xt, <code>xt_word</code>) that
+points to the start of the actual code. Some words that have the same
+functionality point to the same code block.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Because Tali uses a subroutine threaded model (STC), the classic Forth
+distinction between the Code Field Area (CFA) and the Parameter Field Area
+(PFA, also Data Field Area) is meaningless&#8201;&#8212;&#8201;it&#8217;s all "payload".
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The next pointer is for the <strong>end of the code</strong> (<code>z_word</code>) to enable native
+compilation of the word (if allowed and requested).</p>
+</div>
+<div class="paragraph">
+<p>The <strong>name string</strong> starts at the eighth byte. The string is <em>not</em>
+zero-terminated.  Tali Forth lowercases names as they are copied into the
+dictionary and also lowercases during lookup, so <code>quarian</code> is the same word as
+<code>QUARIAN</code>.  If the name in the dictionary is directly modified, it is important
+to ensure that only lowercase letters are used, or else Tali will not be able
+to find that word.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_structure_of_the_header_list">Structure of the Header List</h4>
+<div class="paragraph">
+<p>Tali Forth distinguishes between three different word sources: The <strong>native
+words</strong> that are hard-coded in the file <code>native_words.asm</code>, the <strong>Forth words</strong>
+from <code>forth_words.asm</code> which are defined as high-level words and then generated
+at run-time when Tali Forth starts up, and <strong>user words</strong> in the file
+<code>user_words.asm</code>.</p>
+</div>
+<div class="paragraph">
+<p>Tali has an unusually high number of native words in an attempt to make the
+Forth as fast as possible on the 65c02 and compensate for the disadvantages of
+the subroutine threading model (STC). The first word on that list&#8201;&#8212;&#8201;the one
+that is checked first&#8201;&#8212;&#8201;is always <code>drop</code>, the last one&#8201;&#8212;&#8201;the one checked for
+last&#8201;&#8212;&#8201;is always <code>bye</code>. The words which are (or are assumed to be) used more
+than others come first. Since humans are slow, words that are used more
+interactively like <code>words</code> always come later.</p>
+</div>
+<div class="paragraph">
+<p>The list of Forth words ends with the intro strings. This functions as a
+primitive form of a self-test: If you see the welcome message, compilation of
+the Forth words worked.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>   $0000  +-------------------+  ram_start, zpage, user0
+          |  User variables  |
+          +-------------------+
+          |                   |
+          |  ^  Data Stack    |  &lt;-- dsp
+          |  |                |
+   $0078  +-------------------+  dsp0, stack
+          |                   |
+          |   (Reserved for   |
+          |      kernel)      |
+          |                   |
+   $0100  +===================+
+          |                   |
+          |  ^  Return Stack  |  &lt;-- rsp
+          |  |                |
+   $0200  +-------------------+  rsp0, buffer, buffer0
+          |  |                |
+          |  v  Input Buffer  |
+          |                   |
+   $0300  +-------------------+  cp0
+          |  |                |
+          |  v  Dictionary    |
+          |       (RAM)       |
+          |                   |
+          ~~~~~~~~~~~~~~~~~~~~~  &lt;-- cp
+          |                   |
+          |                   |
+          +-------------------+
+          |                   |
+          | ACCEPT history    |
+          |                   |
+   $7FFF  #####################  ram_end
+   $8000  |                   |  forth, code0
+          |                   |
+          |                   |
+          |    Tali Forth     |
+          |     (24 KiB)      |
+          |                   |
+          |                   |
+   $E000  +-------------------+
+          |                   |  kernel_putc, kernel_getc
+          |      Kernel       |
+          |                   |
+   $F000  +-------------------+
+          |   I/O addresses   |
+          +-------------------+
+          |                   |
+          |      Kernel       |
+          |                   |
+   $FFFA  +-------------------+
+          |  65c02 vectors    |
+   $FFFF  +-------------------+</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that some of these values are hard-coded into the test suite; see the file
+<code>definitions.txt</code> for details.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_input">Input</h3>
+<div class="paragraph">
+<p>Tali Forth follows the ANS Forth input model with <code>refill</code> instead of older
+forms. There are four possible input sources:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The keyboard ("user input device")</p>
+</li>
+<li>
+<p>A character string in memory</p>
+</li>
+<li>
+<p>A block file</p>
+</li>
+<li>
+<p>A text file</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To check which one is being used, we first call <code>blk</code> which gives us the number
+of a mass storage block being used, or 0 for the "user input device" (keyboard).
+In the second case, we use <code>source-id</code> to find out where input is coming from:</p>
+</div>
+<table class="tableblock frame-all grid-all">
+<caption class="title">Table 4. Non-block input sources</caption>
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">keyboard</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string in memory</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>n</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">file-id</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Since Tali currently doesn&#8217;t support blocks, we can skip the <code>blk</code> instruction
+and go right to <code>source-id</code>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+One gotcha with Tali Forth&#8217;s input is that current it only sees spaces,
+but not other whitespace, as delimiters. This means that Forth text files that
+are fed to Tali may not contain tabs. This behavior might be changed in the
+future.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_booting_2">Booting</h4>
+<div class="paragraph">
+<p>The initial commands after reboot flow into each other: <code>cold</code> to <code>abort</code> to
+<code>quit</code>. This is the same as with pre-ANS Forths.  However, <code>quit</code> now calls
+<code>refill</code> to get the input.  <code>refill</code> does different things based on which of the
+four input sources (see above) is active:</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Keyboard entry
+</td>
+<td class="hdlist2">
+<p>This is the default. Get line of input via <code>accept</code> and return <code>true</code>
+even if the input string was empty.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<code>evaluate</code> string
+</td>
+<td class="hdlist2">
+<p>Return a <code>false</code> flag</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Input from a buffer
+</td>
+<td class="hdlist2">
+<p><em>Not implemented at this time</em></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Input from a file
+</td>
+<td class="hdlist2">
+<p><em>Not implemented at this time</em></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_the_command_line_interface_cli">The Command Line Interface (CLI)</h4>
+<div class="paragraph">
+<p>Tali Forth accepts input lines of up to 256 characters. The address of the
+current input buffer is stored in <code>cib</code>. The length of the current buffer is
+stored in <code>ciblen</code>&#8201;&#8212;&#8201;this is the address that <code>&gt;in</code> returns.  <code>source</code> by
+default returns <code>cib</code> and <code>ciblen</code> as the address and length of the input
+buffer.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_the_word_code_evaluate_code">The Word <code>evaluate</code></h4>
+<div class="paragraph">
+<p>The word `evaluate`is used to execute commands that are in a string. A simple example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>s" 1 2 + ." evaluate</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Tali Forth uses <code>evaluate</code> to load high-level Forth words from the file
+<code>forth_words.asc</code> and, if present, any extra, user-defined words from
+<code>user_words.asc</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_words_code_create_code_and_code_does_code">The Words <code>create</code> and <code>does&gt;</code></h3>
+<div class="paragraph">
+<p>The tandem of words <code>create</code> and <code>does&gt;</code> is the most complex, but also most
+powerful part of Forth. Understanding how it works in Tali Forth is important
+if you want to be able to modify the code. In this text, we walk through the
+generation process for a subroutine threaded code (STC) such as Tali Forth.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For a more general explanation, see Brad Rodriguez' series of articles at
+<a href="http://www.bradrodriguez.com/papers/moving3.htm" class="bare">http://www.bradrodriguez.com/papers/moving3.htm</a> There is a discussion of this
+walkthrough at <a href="http://forum.6502.org/viewtopic.php?f=9&amp;t=3153" class="bare">http://forum.6502.org/viewtopic.php?f=9&amp;t=3153</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We start with the following standard example, a high-level Forth version of the
+word <code>constant</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>: constant  ( "name" -- )  create , does&gt; @ ;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We examine this in three phases or "sequences", following Rodriguez (based on
+<a href="#DB">[DB]</a>).</p>
+</div>
+<div class="sect3">
+<h4 id="_sequence_1_compiling_the_word_code_constant_code">Sequence 1: Compiling the Word <code>constant</code></h4>
+<div class="paragraph">
+<p><code>constant</code> is a defining word, one that makes new words. In pseudocode,
+ignoring any compilation to native 65c02 assembler, the above compiles to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        jsr CREATE
+        jsr COMMA
+        jsr (DOES&gt;)         ; from DOES&gt;
+   a:   jsr DODOES          ; from DOES&gt;
+   b:   jsr FETCH
+        rts</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To make things easier to explain later, we&#8217;ve added the labels <code>a</code> and
+<code>b</code> in the listing.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This example uses the traditional word <code>(does&gt;)</code>, which in Tali Forth 2
+is actually an internal routine that does not appear as a separate word. This
+version is easier to explain.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>does&gt;</code> is an immediate word that adds not one, but two subroutine jumps, one
+to <code>(does&gt;)</code> and one to <code>dodoes</code>, which is a pre-defined system routine like
+<code>dovar</code>. We&#8217;ll discuss those later.</p>
+</div>
+<div class="paragraph">
+<p>In Tali Forth, a number of words such as <code>defer</code> are "hand-compiled", that is,
+instead of using forth such as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>: defer create ['] abort , does&gt; @ execute ;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>we write an optimized assembler version ourselves (see the actual <code>defer</code> code).
+In these cases, we need to use <code>(does&gt;)</code> and <code>dodoes</code> instead of <code>does&gt;</code> as
+well.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sequence_2_executing_the_word_code_constant_code">Sequence 2: Executing the Word <code>constant</code></h4>
+<div class="paragraph">
+<p>Now when we execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>42 constant life</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This pushes the <code>rts</code> of the calling routine&#8201;&#8212;&#8201;call it "main"&#8201;&#8212;&#8201;to the
+65c02&#8217;s stack (the Return Stack, as Forth calls it), which now looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        (1) rts                 ; to main routine</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Without going into detail, the first two subroutine jumps of <code>constant</code> give us
+this word:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        (Header "LIFE")
+        jsr DOVAR               ; in CFA, from LIFE's CREATE
+        4200                    ; in PFA (little-endian)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, we <code>jsr</code> to <code>(does&gt;)</code>. The address that this pushes on the Return Stack
+is the instruction of <code>constant</code> we had labeled <code>a</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        (2) rts to CONSTANT ("a")
+        (1) rts to main routine</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now the tricks start. <code>(does&gt;)</code> takes this address off the stack and uses it to
+replace the <code>dovar jsr</code> target in the CFA of our freshly created <code>life</code> word.
+We now have this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        (Header "LIFE")
+        jsr a                   ; in CFA, modified by (DOES&gt;)
+   c:   4200                    ; in PFA (little-endian)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note we added a label <code>c</code>. Now, when <code>(does&gt;)</code> reaches its own <code>rts</code>, it finds
+the <code>rts</code> to the main routine on its stack. This is Good Thing&#8482;, because it
+aborts the execution of the rest of <code>constant</code>, and we don&#8217;t want to do
+<code>dodoes</code> or <code>fetch</code> now. We&#8217;re back at the main routine.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sequence_3_executing_code_life_code">Sequence 3: Executing <code>life</code></h4>
+<div class="paragraph">
+<p>Now we execute the word <code>life</code> from our "main" program. In a STC Forth
+such as Tali Forth, this executes a subroutine jump.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        jsr LIFE</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first thing this call does is push the return address to the main routine
+on the 65c02&#8217;s stack:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        (1) rts to main</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The CFA of <code>life</code> executes a subroutine jump to label <code>a</code> in <code>constant</code>. This
+pushes the <code>rts</code> of <code>life</code> on the 65c02&#8217;s stack:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        (2) rts to LIFE ("c")
+        (1) rts to main</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This <code>jsr</code> to a lands us at the subroutine jump to <code>dodoes</code>, so the return
+address to <code>constant</code> gets pushed on the stack as well. We had given this
+instruction the label <code>b</code>. After all of this, we have three addresses on the
+65c02&#8217;s stack:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        (3) RTS to CONSTANT ("b")
+        (2) RTS to LIFE ("c")
+        (1) RTS to main</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>dodoes</code> pops address <code>b</code> off the 65c02&#8217;s stack and puts it in a nice safe place
+on Zero Page, which we&#8217;ll call <code>z</code>. More on that in a moment. First, <code>dodoes</code>
+pops the <code>rts</code> to <code>life</code>. This is <code>c</code>, the address of the PFA or <code>life</code>, where
+we stored the payload of this constant. Basically, <code>dodoes</code> performs a <code>dovar</code>
+here, and pushes <code>c</code> on the Data Stack. Now all we have left on the 65c02&#8217;s
+stack is the <code>rts</code> to the main routine.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        [1] RTS to main</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is where <code>z</code> comes in, the location in Zero Page where we stored address
+<code>b</code> of <code>constant</code>. Remember, this is where the PFA of <code>constant</code> begins, the
+<code>fetch</code> command we had originally codes after <code>does&gt;</code> in the very first
+definition. The really clever part: We perform an indirect <code>jmp</code>&#8201;&#8212;&#8201;not a
+<code>jsr</code>!&#8201;&#8212;&#8201;to this address.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        jmp (z)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now the little payload program of <code>constant</code> is executed, the subroutine jump
+to <code>fetch</code>. Since we just put the PFA (<code>c</code>) on the Data Stack, <code>fetch</code> replaces
+this by 42, which is what we were aiming for all along.  And since <code>constant</code>
+ends with a <code>rts</code>, we pull the last remaining address off the 65c02&#8217;s stack,
+which is the return address to the main routine where we started. And that&#8217;s
+all.</p>
+</div>
+<div class="paragraph">
+<p>Put together, this is what we have to code:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>does&gt;</code></dt>
+<dd>
+<p>Compiles a subroutine jump to <code>(does&gt;)</code>, then compiles a subroutine
+jump to <code>dodoes</code>.</p>
+</dd>
+<dt class="hdlist1"><code>(does&gt;)</code></dt>
+<dd>
+<p>Pops the stack (address of subroutine jump to <code>dodoes</code> in
+<code>constant</code>, increase this by one, replace the original <code>dovar</code> jump target in
+<code>life</code>.</p>
+</dd>
+<dt class="hdlist1"><code>dodoes</code></dt>
+<dd>
+<p>Pop stack (PFA of <code>constant</code>), increase address by one, store on
+Zero Page; pop stack (PFA of <code>life</code>), increase by one, store on Data Stack;
+<code>jmp</code> to address we stored in Zero Page.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Remember we have to increase the addresses by one because of the way <code>jsr</code>
+stores the return address for <code>rts</code> on the stack on the 65c02: It points to the
+third byte of the <code>jsr</code> instruction itself, not the actual return address. This
+can be annoying, because it requires a sequence like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>        inc z
+        bne +
+        inc z+1
+*
+        (...)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that with most words in Tali Forth, as any STC Forth, the distinction
+between PFA and CFA is meaningless or at least blurred, because we go native
+anyway. It is only with words generated by <code>create</code> and <code>does&gt;</code> where this
+really makes sense.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_control_flow">Control Flow</h3>
+<div class="sect3">
+<h4 id="_branches">Branches</h4>
+<div class="paragraph">
+<p>For <code>if</code> and <code>then</code>, we need to compile something called a "conditional forward
+branch", traditionally called <code>0branch</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Many Forths now use the words <code>cs-pick</code> and <code>cs-roll</code> instead of the
+<code>branch</code> variants, see
+<a href="http://lars.nocrew.org/forth2012/rationale.html\#rat:tools:CS-PICK" class="bare">http://lars.nocrew.org/forth2012/rationale.html\#rat:tools:CS-PICK</a> Tali Forth
+will probably switch to this variant in the future.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>At run-time, if the value on the Data Stack is false (flag is zero), the branch
+is taken ("branch on zero", therefore the name). Except that we don&#8217;t have the
+target of that branch yet&#8201;&#8212;&#8201;it will later be added by <code>then</code>. For this to work,
+we remember the address after the <code>0branch</code> instruction during the compilation
+of <code>if</code>. This is put on the Data Stack, so that <code>then</code> knows where to compile
+it&#8217;s address in the second step. Until then, a dummy value is compiled after
+<code>0branch</code> to reserve the space we need.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This section and the next one are based on a discussion at
+<a href="http://forum.6502.org/viewtopic.php?f=9\&amp;t=3176" class="bare">http://forum.6502.org/viewtopic.php?f=9\&amp;t=3176</a> see there for more details.
+Another take on this subject that handles things a bit differently is at
+<a href="http://blogs.msdn.com/b/ashleyf/archive/2011/02/06/loopty-do-i-loop.aspx" class="bare">http://blogs.msdn.com/b/ashleyf/archive/2011/02/06/loopty-do-i-loop.aspx</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In Forth, this can be realized by</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>: if  postpone 0branch here 0 , ; immediate</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>: then  here swap ! ; immediate</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note <code>then</code> doesn&#8217;t actually compile anything at the location in memory where
+it is at. It&#8217;s job is simply to help <code>if</code> out of the mess it has created. If we
+have an <code>else</code>, we have to add an unconditional <code>branch</code> and manipulate the
+address that <code>if</code> left on the Data Stack. The Forth for this is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>: else  postpone branch here 0 , here rot ! ; immediate</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that <code>then</code> has no idea what has just happened, and just like before
+compiles its address where the value on the top of the Data Stack told it to&#8201;&#8212;&#8201;except that this value now comes from <code>else</code>, not <code>if</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_loops">Loops</h4>
+<div class="paragraph">
+<p>Loops are more complicated, because we have <code>do</code>, <code>?do</code>, <code>loop</code>, <code>+loop</code>,
+<code>unloop</code>, and <code>leave</code> to take care of. These can call up to three addresses: One
+for the normal looping action (<code>loop</code> and <code>+loop</code>), one to skip over the loop at
+the beginning (<code>?do</code>) and one to skip out of the loop (<code>leave</code>).</p>
+</div>
+<div class="paragraph">
+<p>Based on a suggestion by Garth Wilson, we begin each loop in run-time by saving
+the address after the whole loop construct to the Return Stack. That way,
+<code>leave</code> and <code>?do</code> know where to jump to when called, and we don&#8217;t interfere with
+any <code>if</code>-<code>then</code> structures. On top of that address, we place the limit and start
+values for the loop.</p>
+</div>
+<div class="paragraph">
+<p>The key to staying sane while designing these constructs is to first make
+a list of what we want to happen at compile time and what at run time. Let&#8217;s
+start with a simple <code>do</code>-<code>loop</code>.</p>
+</div>
+<div class="sect4">
+<h5 id="__code_do_code_at_compile_time"><code>do</code> at compile-time:</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Remember current address (in other words, <code>here</code>) on the Return Stack (!) so
+we can later compile the code for the post-loop address to the Return Stack</p>
+</li>
+<li>
+<p>Compile some dummy values to reserve the space for said code</p>
+</li>
+<li>
+<p>Compile the run-time code; we&#8217;ll call that fragment (<code>do</code>)</p>
+</li>
+<li>
+<p>Push the current address (the new <code>here</code>) to the Data Stack so <code>loop</code> knows
+where the loop contents begin</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="__code_do_code_at_run_time"><code>do</code> at run-time:</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Take limit and start off Data Stack and push them to the Return Stack</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Since <code>loop</code> is just a special case of <code>+loop</code> with an index of one, we can get
+away with considering them at the same time.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="__code_loop_code_at_compile_time"><code>loop</code> at compile time:</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Compile the run-time part <code>(+loop)</code></p>
+</li>
+<li>
+<p>Consume the address that is on top of the Data Stack as the jump target for
+normal looping and compile it</p>
+</li>
+<li>
+<p>Compile <code>unloop</code> for when we&#8217;re done with the loop, getting rid of the
+limit/start and post-loop addresses on the Return Stack</p>
+</li>
+<li>
+<p>Get the address on the top of the Return Stack which points to
+the dummy code compiled by <code>do</code></p>
+</li>
+<li>
+<p>At that address, compile the code that pushes the address after the list
+construct to the Return Stack at run-time</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="__code_loop_code_at_run_time_which_is_code_loop_code"><code>loop</code> at run-time (which is <code>(+loop)</code>)</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Add loop step to count</p>
+</li>
+<li>
+<p>Loop again if we haven&#8217;t crossed the limit, otherwise continue after loop</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>At one glance, we can see that the complicated stuff happens at compile-time.
+This is good, because we only have to do that once for each loop.</p>
+</div>
+<div class="paragraph">
+<p>In Tali Forth, these routines are coded in assembler. With this setup, <code>unloop</code>
+becomes simple (six <code>pla</code> instructions&#8201;&#8212;&#8201;four for the limit/count of <code>do</code>, two
+for the address pushed to the stack just before it) and <code>leave</code> even simpler
+(four <code>pla</code> instructions for the address).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_native_compiling_2">Native Compiling</h3>
+<div class="paragraph">
+<p>In a pure subroutine threaded code, higher-level words are merely a series of
+subroutine jumps. For instance, the Forth word <code>[char]</code>, formally defined in
+high-level Forth as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>: [char] char postpone literal ; immediate</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in assembler is simply</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>                jsr xt_char
+                jsr xt_literal</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>as an immediate, compile-only word. There are two problems with this method:
+First, it is slow, because each <code>jsr</code>-<code>rts</code> pair consumes four bytes and 12
+cycles as overhead. Second, for smaller words, the jumps use far more bytes than
+the actual code. Take for instance <code>drop</code>, which in its naive form is simply</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>                inx
+                inx</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>for two bytes and four cycles. If we jump to this word as is assumed with pure
+subroutine threaded Forth, we add four bytes and 12 cycles&#8201;&#8212;&#8201;double the space
+and three times the time required by the actual working code.</p>
+</div>
+<div class="paragraph">
+<p>(In practice, it&#8217;s even worse, because <code>drop</code> checks for underflow. The actual
+assembler code is</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>                cpx #dsp0-1
+                bmi +
+                jmp underflow
+*
+                inx
+                inx</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>for eleven bytes. We&#8217;ll discuss the underflow checks further below.)</p>
+</div>
+<div class="paragraph">
+<p>To get rid of this problem, Tali Forth supports <strong>native compiling</strong> (also known
+as inlining). The system variable <code>nc-limit</code> sets the threshold up to which a
+word will be included not as a subroutine jump, but in machine language. Let&#8217;s
+start with an example where <code>nc-limit</code> is set to zero, that is, all words are
+compiled as subroutine jumps. Take a simple word such as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>: aaa 0 drop ;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and check the actual code with <code>see</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>see aaa
+  nt: 7CD  xt: 7D8
+ size (decimal): 6
+
+07D8  20 52 99 20 6B 88  ok</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(The actual addresses might be different, this is from the ALPHA release). Our
+word <code>aaa</code> consists of two subroutine jumps, one to zero and one to <code>drop</code>.
+Now, if we increase the threshold to 20, we get different code, as this
+console session shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>20 nc-limit !  ok
+: bbb 0 drop ;  ok
+see bbb
+  nt: 7DF  xt: 7EA
+ size (decimal): 17
+
+07EA  CA CA 74 00 74 01 E0 77  30 05 A9 0B 4C C7 AC E8
+07FA  E8  ok</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Even though the definition of <code>bbb</code> is the same as <code>aaa</code>, we have totally
+different code: The number 0001 is pushed to the Data Stack (the first six
+bytes), then we check for underflow (the next nine bytes), and finally we
+<code>drop</code> by moving X register, the Data Stack Pointer. Our word is definitely
+longer, but have just saved 12 cycles.</p>
+</div>
+<div class="paragraph">
+<p>To experiment with various parameters for native compiling, the Forth word
+<code>words&amp;sizes</code> is included in <code>user_words.fs</code> (but commented out by default).
+The Forth is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>: words&amp;sizes ( -- )
+        latestnt
+        begin
+                dup
+        0&lt;&gt; while
+                dup name&gt;string type space
+                dup wordsize u. cr
+                2 + @
+        repeat
+        drop ;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An alternative is <code>see</code> which also displays the length of a word. One way or
+another, changing <code>nc-limit</code> should show differences in the Forth words.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_return_stack_special_cases">Return Stack Special Cases</h3>
+<div class="paragraph">
+<p>There are a few words that cause problems with subroutine threaded code (STC):
+Those that access the Return Stack such as <code>r&gt;</code>, <code>&gt;r</code>, <code>r@</code>, <code>2r&gt;</code>, and <code>2&gt;r</code>.
+We first have to remove the return address on the top of the stack, only to
+replace it again before we return to the caller. This mechanism would normally
+prevent the word from being natively compiled at all, because we&#8217;d try to remove
+a return address that doesn&#8217;t exit.</p>
+</div>
+<div class="paragraph">
+<p>This becomes clearer when we examine the code for <code>&gt;r</code> (comments
+removed):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>xt_r_from:
+                pla
+                sta tmptos
+                ply
+
+                ; --- CUT FOR NATIVE CODING ---
+
+                dex
+                dex
+                pla
+                sta 0,x
+                pla
+                sta 1,x
+
+                ; --- CUT FOR NATIVE CODING ---
+
+                phy
+                lda tmptos
+                pha
+
+z_r_from:       rts</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first three and last three instructions are purely for housekeeping with
+subroutine threaded code. To enable this routine to be included as native code,
+they are removed when native compiling is enabled by the word <code>compile,</code> This
+leaves us with just the six actual instructions in the center of the routine to
+be compiled into the new word.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_underflow_stripping">Underflow Stripping</h3>
+<div class="paragraph">
+<p>As described above, every underflow check adds seven bytes to the word being
+coded. Stripping this check by setting the <code>uf-strip</code> system variable to <code>true</code>
+simply removes these seven bytes from new natively compiled words.</p>
+</div>
+<div class="paragraph">
+<p>It is possible, of course, to have lice and fleas at the some time. For
+instance, this is the code for <code>&gt;r</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>xt_to_r:
+                pla
+                sta tmptos
+                ply
+
+                ; --- CUT HERE FOR NATIVE CODING ---
+
+                cpx #dsp0-1
+                bmi +
+                jmp underflow
+*
+                lda 1,x
+                pha
+                lda 0,x
+                pha
+
+                inx
+                inx
+
+                ; --- CUT HERE FOR NATIVE CODING ---
+
+                phy
+                lda tmptos
+                pha
+
+z_to_r:         rts</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This word has <em>both</em> native compile stripping and underflow detection. However,
+both can be removed from newly native code words, leaving only the eight byte
+core of the word to be compiled.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="__code_cmove_code_code_cmove_code_and_code_move_code"><code>cmove</code>, <code>cmove&gt;</code> and <code>move</code></h3>
+<div class="paragraph">
+<p>The three moving words <code>cmove</code>, <code>cmove&gt;</code> and <code>move</code> show subtle differences
+that can trip up new users and are reflected by different code under the hood.
+<code>cmove</code> and <code>cmove&gt;</code> are the traditional Forth words that work on characters
+(which in the case of Tali Forth are bytes), whereas <code>move</code> is a more modern
+word that works on address units (which in our case is also bytes).</p>
+</div>
+<div class="paragraph">
+<p>If the source and destination regions show no overlap, all three words work the
+same. However, if there is overlap, <code>cmove</code> and <code>cmove&gt;</code> demonstrate a behavior
+called "propagation" or "clobbering" : Some of the characters are overwritten.
+`move: does not show this behavior. This example shows the difference:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>create testbuf  char a c,  char b c,  char c c,  char d c,  ( ok )
+testbuf 4 type  ( abcd ok )
+testbuf dup char+ 3  cmove  ( ok )
+testbuf 4 type ( aaaa ok )</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note the propagation in the result. <code>move</code>, however, doesn&#8217;t propagate.
+The last two lines would be:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>testbuf dup char+ 3  move  ( ok )
+testbuf 4 type  ( aabc ok )</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In practice, <code>move</code> is usually what you want to use.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_developing">Developing</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+After spending an entire weekend wrestling with blocks files, stacks, and
+the like, I was horrified and convinced that I had made a mistake. Who
+in their right mind would want to program in this godforsaken language! <a href="#DH">[DH]</a>
+</blockquote>
+<div class="attribution">
+&#8212; Doug Hoffman<br>
+<cite>Some notes on Forth from a novice user</cite>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_adding_new_words">Adding New Words</h3>
+<div class="paragraph">
+<p>The simplest way to add new words to Tali Forth is to include them in the file
+<code>forth_code/user_words.fs</code>. This is the suggested place to put them for personal
+use.</p>
+</div>
+<div class="paragraph">
+<p>To add words to the permanent set, it is best to start a pull request on the
+GitHub page of Tali Forth. How to setup and use <code>git</code> and GitHub is beyond the
+scope of this document&#8201;&#8212;&#8201;we&#8217;ll just point out it they are not as complicated as
+they look, and the make experimenting a lot easier.</p>
+</div>
+<div class="paragraph">
+<p>During development, Tali Forth tends to follow a sequence of steps for new words:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If it is an ANS Forth word, first review the standard online. In some cases,
+there is a reference implementation that can be used.</p>
+</li>
+<li>
+<p>Otherwise, check other sources for a high-level realization of the word, for
+instance Jonesforth or Gforth. A direct copy is usually not possible (or legally
+allowed, given different licenses), but studying the code provides hints for
+a Tali Forth version.</p>
+</li>
+<li>
+<p>Write the word in Forth in the interpreter. After it has been tested tested
+interactively, add a high-level version to the file <code>forth_code/forth_words.fs</code>.</p>
+</li>
+<li>
+<p>Add automatic tests for the new word to the test suite. Ideally, there will
+be test code included in the ANS Forth specification. If not, document what
+the test does.</p>
+</li>
+<li>
+<p>In a further step, if appropriate, convert the word to assembler. This
+requires adding an entry to <code>headers.asm</code> and the code itself to <code>native_words.asm</code>.
+In this first step, it will usually be a simple 1:1 sequence of <code>jsr</code> subroutine
+jumps to the existing native Forth words.</p>
+</li>
+<li>
+<p>If appropriate, rewrite all or some of the subroutine jumps in direct
+assembler. Because we have the automatic tests in place, we can be confident
+that the assembly version is correct as well.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>However, if you are contributing code, feel free to happily ignore this sequence
+and just submit whatever you have.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deeper_changes">Deeper Changes</h3>
+<div class="paragraph">
+<p>Tali Forth was not only placed in the public domain to honor the tradition of
+giving the code away freely. It is also to let people play around with it and
+adapt it to their own machines. This is also the reason it is (perversely)
+over-commented.</p>
+</div>
+<div class="paragraph">
+<p>To work on the internals of Tali Forth, you will need the Ophis assembler.</p>
+</div>
+<div class="sect3">
+<h4 id="_the_ophis_assembler">The Ophis Assembler</h4>
+<div class="paragraph">
+<p>Michael Martin&#8217;s Ophis Cross-Assembler can be downloaded from
+<a href="http://michaelcmartin.github.io/Ophis/" class="bare">http://michaelcmartin.github.io/Ophis/</a>. It uses a slightly different format than
+other assemblers, but is in Python and therefore will run on pretty much any
+operating system. To install Ophis on Windows, use the link provided above. For
+Linux:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>git clone https://github.com/michaelcmartin/Ophis
+cd Ophis/src
+sudo python setup.py install</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Switch to the folder where the Tali code lives, and run the Makefile with a
+simple <code>make</code> command. This also updates the file listings in the <code>docs</code> folder.</p>
+</div>
+<div class="paragraph">
+<p>Ophis has some quirks. For instance, you cannot use math symbols in label names,
+because it will try to perform those operations. Use underscores instead.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_general_notes">General Notes</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>The X register is used as the Data Stack Pointer (DSP) and should only be used
+if there is no other alternative.</p>
+</li>
+<li>
+<p>The Y register, however, is free to be changed by subroutines. This also means
+it should not be expected to survive subroutines unchanged.</p>
+</li>
+<li>
+<p>Naively coded words generally should have exactly one point of entry&#8201;&#8212;&#8201;the
+<code>xt_word</code> link&#8201;&#8212;&#8201;and exactly one point of exit at <code>z_word</code>. In may cases,
+this requires a branch to an internal label <code>_done</code> right before <code>z_word</code>.</p>
+</li>
+<li>
+<p>Because of the way native compiling works, the trick of combining
+<code>jsr</code>-<code>rts</code> pairs to a single <code>jmp</code> instruction (usually) doesn&#8217;t work.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_coding_style">Coding Style</h4>
+<div class="paragraph">
+<p>Until there is a tool for Ophis assembly code that formats the source file the
+way gofmt does for Go (golang), the following format is suggested.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Tabs are <strong>eight characters long</strong> and converted to spaces.</p>
+</li>
+<li>
+<p>Opcodes are indented by <strong>two tabs</strong>.</p>
+</li>
+<li>
+<p>Function-like routines are followed by a one-tab indented "function doc string"
+based on the Python 3 format: Three quotation marks at the start, three at the
+end in their own line, unless it is a one-liner. This should make it easier to
+automatically extract the docs for them at some point.</p>
+</li>
+<li>
+<p>The native words have a special comment format with lines that start with <code>##</code>
+that allows the automatic generation of word lists by a tool in the tools
+folder, see there for details.</p>
+</li>
+<li>
+<p>Assembler mnemonics are lower case. I get enough uppercase insanity writing German,
+thank you very much.</p>
+</li>
+<li>
+<p>Hex numbers are, however, upper case, such as <code>$FFFE</code>.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The Ophis assembler interprets numbers with a leading zero as octal.
+This can be an annoying source of errors.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Numbers in mnemonics are a stripped-down as possible to reduce
+visual clutter: use <code>lda 0,x</code> instead of <code>lda $00,x</code>.</p>
+</li>
+<li>
+<p>Comments are included like popcorn to help readers who are new both to Forth
+and 6502 assembler.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_code_cheat_sheets">Code Cheat Sheets</h3>
+<div class="quoteblock">
+<blockquote>
+Programming computers can be crazy-making. <a href="#LB2">[LB2]</a>
+</blockquote>
+<div class="attribution">
+&#8212; Leo Brodie<br>
+<cite>Thinking Forth</cite>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_the_stack_drawing">The Stack Drawing</h4>
+<div class="paragraph">
+<p>This is your friend and should probably go on your wall or something.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>                +--------------+
+                |          ... |
+                +-            -+
+                |              |   ...
+                +-  (empty)   -+
+                |              |  FE,X
+                +-            -+
+          ...   |              |  FF,X
+                +==============+
+         $0076  |           LSB|  00,X   &lt;-- DSP (X Register)
+                +-    TOS     -+
+         $0077  |           MSB|  01,X
+                +==============+
+         $0078  |  (garbage)   |  02,X   &lt;-- DSP0
+                +--------------+
+         $0079  |              |  03,X
+                + (floodplain) +
+         $007A  |              |  04,X
+                +--------------+</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_coding_idioms">Coding Idioms</h4>
+<div class="quoteblock">
+<blockquote>
+The first modern FORTH was coded in FORTRAN. Shortly thereafter it was recoded
+in assembler. Much later it was coded in FORTH. <a href="#CHM2">[CHM2]</a>
+</blockquote>
+<div class="attribution">
+&#8212; Charles Moore<br>
+<cite>The Evolution of FORTH</cite>
+</div>
+</div>
+<div class="paragraph">
+<p>While coding a Forth, there are certain assembler fragments that get repeated
+over and over again. These could be included as macros, but that can make the
+code harder to read for somebody only familiar with basic assembly.</p>
+</div>
+<div class="paragraph">
+<p>Some of these fragments could be written in other variants, such as the "push
+value" version, which could increment the DSP twice before storing a value. We
+try to keep these in the same sequence (a "dialect" or "code mannerism" if you
+will) so we have the option of adding code analysis tools later.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>drop</code> cell of top of the Data Stack</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>                inx
+                inx</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>push</code> a value to the Data Stack. Remember the Data Stack Pointer (DSP, the
+X register of the 65c02) points to the LSB of the TOS value.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>                dex
+                dex
+                lda &lt;LSB&gt;      ; or pla, jsr kernel_getc, etc.
+                sta 0,x
+                lda &lt;MSB&gt;      ; or pla, jsr kernel_getc, etc.
+                sta 1,x</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>pop</code> a value off the Data Stack</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>                lda 0,x
+                sta &lt;LSB&gt;      ; or pha, jsr kernel_putc, etc
+                lda 1,x
+                sta &lt;MSB&gt;      ; or pha, jsr kernel_putc, etc
+                inx
+                inx</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_vim_shortcuts">vim Shortcuts</h4>
+<div class="paragraph">
+<p>One option for these is to add abbreviations to your favorite editor, which
+should of course be vim, because vim is cool. There are examples farther down.
+They all assume that auto-indent is on and we are two tabs into the code, and
+use <code>#</code> at the end of the abbreviation to keep them separate from the normal
+words. My <code>~/.vimrc</code> file contains the following lines for work on <code>.asm</code> files:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ab drop# inx&lt;tab&gt;&lt;tab&gt;; drop&lt;cr&gt;inx&lt;cr&gt;&lt;left&gt;
+ab push# dex&lt;tab&gt;&lt;tab&gt;; push&lt;cr&gt;dex&lt;cr&gt;lda $&lt;LSB&gt;&lt;cr&gt;sta $00,x&lt;cr&gt;lda $&lt;MSB&gt;&lt;cr&gt;sta $01,x&lt;cr&gt;&lt;up&gt;&lt;up&gt;&lt;u&gt;
+ab pop# lda $00,x&lt;tab&gt;&lt;tab&gt;; pop&lt;cr&gt;sta $&lt;LSB&gt;&lt;cr&gt;lda $01,x&lt;cr&gt;sta $&lt;MSB&gt;&lt;cr&gt;inx&lt;cr&gt;inx&lt;cr&gt;&lt;up&gt;&lt;up&gt;&lt;up&gt;&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_future_and_long_term_plans">Future and Long-Term plans</h2>
+<div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+This section is missing. See the GitHub page for further details.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<h1 id="_appendix" class="sect0">Appendix</h1>
+<div class="sect1">
+<h2 id="_reporting_problems">Reporting Problems</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The best way to point out a bug or make any other form of a comment is on Tali
+Forth&#8217;s page on GitHub at <a href="https://github.com/scotws/TaliForth2" class="bare">https://github.com/scotws/TaliForth2</a> There, you can
+"open an issue", which allows other people who might have the same problem to
+help even when the author is not available.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_faq">FAQ</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Why does Tali Forth take so long to start up?</dt>
+<dd>
+<p>After the default kernel string is printed, you&#8217;ll notice a short pause that
+didn&#8217;t occur with Tali Forth 1. This is because Tali Forth 2 has more words
+defined in high-level Forth (see <code>forth_code/forth-words.fs</code>). The pause
+happens because they are being compiled on the fly.</p>
+</dd>
+<dt class="hdlist1">What happened to Tali Forth 1 anyway?</dt>
+<dd>
+<p>Tali Forth 1, informally just Tali Forth, was my first Forth.
+As such, it is fondly remembered as a learning experience. You can still find
+it online at GitHub at <a href="https://github.com/scotws/TaliForth" class="bare">https://github.com/scotws/TaliForth</a>.  When
+Tali Forth 2 entered BETA, Tali Forth was discontinued. It does not
+receive bug fixes. In fact, new bugs are not even documented.</p>
+</dd>
+</dl>
+</div>
+<div id="img_talialpha" class="imageblock" style="text-align: center">
+<div class="content">
+<img src="pics/tali_forth_alpha003.png" alt="tali forth alpha003">
+</div>
+<div class="title">Figure 3. Screenshot of the Tali Forth 1 boot screen, version Alpha 3, April 2014</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">What does the word "FEHLT" mean in unfinished code?</dt>
+<dd>
+<p>That&#8217;s German for "missing". During development, I use it as a marker
+where stuff has to be added, sort of like another level of "TODO". Since there
+is no English word like that, it&#8217;s very easy to find with <code>grep</code>.</p>
+</dd>
+<dt class="hdlist1">Who&#8217;s "Tali"?</dt>
+<dd>
+<p>I like the name, and we&#8217;re probably not going to have any more kids I can give
+it to. If it sounds vaguely familiar, you&#8217;re probably thinking of Tali&#8217;Zorah vas
+Normandy a character in the <em>Mass
+Effect</em>  universe created by BioWare. This
+software has absolutely nothing to do with neither the game nor the companies and
+neither do I, expect that I&#8217;ve played the whole series and enjoyed it.<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnote_4" title="View footnote.">4</a>]</sup></p>
+</dd>
+<dt class="hdlist1">And who is "Liara"?</dt>
+<dd>
+<p>Liara Forth is another STC Forth for the big sibling of the 6502, the
+65816. Tali Forth 1 came first, then I wrote Liara
+with that knowledge and learned even more, and now Tali 2 is such much better
+for the experience. And yes, it&#8217;s another <em>Mass Effect</em> 
+character.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_testing_tali_forth_2">Testing Tali Forth 2</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Tali Forth 2 comes with a test suite in the <code>tests</code> folder. It is
+based on the official ANS test code by John Hayes and was
+first adapted for Tali Forth by Sam Colwell.</p>
+</div>
+<div class="paragraph">
+<p>To run it, switch to that folder and start the <code>talitest.py</code> 
+program with Python3. The tests should take only a very few minutes to run and
+produce a lot of output, including, at the end, a list of words that didn&#8217;t
+work. A detailed list of results is saved to the file <code>results.txt</code>.
+</p>
+</div>
+<div class="sect2">
+<h3 id="_user_tests">User Tests</h3>
+<div class="paragraph">
+<p>A special test file named <code>user.fs</code>  is available for users to add
+their own tests.  The results of this will be found just before the cycle
+tests near the end of <code>results.txt</code>.  To run only this set of tests, you can
+use the command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>./talitest.py -t user</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in the tests folder.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cycle_tests">Cycle Tests</h3>
+<div class="paragraph">
+<p>The last set of tests, found in <code>cycles.fs</code>, determines cycle counts for the
+various built-in words.  Users who are adding words may want to add cycle
+tests as well and there are instructions for doing that in that file.  The
+cycle tests only work with the simulator and will not work on real hardware.</p>
+</div>
+<div class="paragraph">
+<p>The cycle tests time (in 65C02 clock cycles) from the jsr that calls a word to
+the rts that returns from the word, including the jsr and rts.  These cycle
+counts are the number of cycles if the word was used directly in interpreted
+mode.  Some words will use more or fewer cycles depending on their input, so
+the cycles reported are for the input provided in the <code>cycles.fs</code> file.</p>
+</div>
+<div class="paragraph">
+<p>The cycle tests work with some help from the py65mon simulator and extensions
+to it in <code>talitest.py</code>.  Accesses to special addresses in the 65C02 memory map
+are used to start, stop, and read back the cycle counter in the simulator.
+A special word named <code>cycle_test</code> is created near the top of <code>cycles.fs</code> to
+help with this.  It accepts the xt of the word you want to test (you
+can get the xt of any word by using the word <code>'</code>) and runs that word with the special memory
+accesses before and after, printing out the results.</p>
+</div>
+<div class="sect3">
+<h4 id="_cycle_tests_and_native_compiling">Cycle Tests and Native Compiling</h4>
+<div class="paragraph">
+<p>Because Tali Forth 2 has native compiling capability, small words used in a
+word declaration will have their assembly code compiled directly into the word
+being defined, rather than using a <code>jsr</code>.  This means that small words will not
+have the overhead of a <code>jsr</code> and <code>rts</code> when they are compiled into other words.</p>
+</div>
+<div class="paragraph">
+<p>A perfect example of that is the built-in word <code>ALIGN</code>.  This word has no
+assembly instructions (except for an <code>rts</code>), but the cycle testing shows it
+takes 12 cycles.  This is the number of cycles to run the word by itself, and
+it&#8217;s the number of cycles to run a <code>jsr</code> instruction followed immediately by
+an <code>rts</code> instruction.</p>
+</div>
+<div class="paragraph">
+<p>When this word is compiled into another word, however, Tali will use native
+compiling and will put the (empty) body of this word into the word being
+compiled rather than using a <code>jsr</code>.  This results in 0 extra cycles for the
+word being defined.  Twelve cycles will be saved for each small word that is
+natively compiled into a new definition.  See the section on Native Compiling
+for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_old_tests">Old Tests</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+During early development, testing was done by hand with a list of words that has
+since been placed in the <code>old</code>  folder. These tests might be still useful if you
+are in the very early stages of developing your own Forth.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_thanks">Thanks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Tali Forth would never have been possible without the help of a very large
+number of people, very few of whom I have actually met.</p>
+</div>
+<div class="paragraph">
+<p>First, there is the crew at <a href="http://6502.org">6502.org</a> who not
+only helped me build my own actual, working 6502 computer, but also introduced
+me to Forth. Tali would not exist without their inspiration, support, and
+feedback.</p>
+</div>
+<div class="paragraph">
+<p>Special thanks go out to Mike Barry and Lee
+Pivonka, who both suggested vast improvements to the code
+in size, structure, and speed. And then there is Sam Colwell
+who contributed the invaluable test suite and a whole lot of code.</p>
+</div>
+<div class="paragraph">
+<p>Thank you, everybody.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references_and_further_reading">References and Further Reading</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a id="FB"></a>[FB] <em>Masterminds of Programming</em>, Federico Biancuzzi,
+O&#8217;Reilly Media 1st edition, 2009.</p>
+</div>
+<div class="paragraph">
+<p><a id="CHM1"></a>[CHM1] "Charles H. Moore: Geek of the Week", redgate Hub 2009
+<a href="https://www.red-gate.com/simple-talk/opinion/geek-of-the-week/chuck-moore-geek" class="bare">https://www.red-gate.com/simple-talk/opinion/geek-of-the-week/chuck-moore-geek</a></p>
+</div>
+<div class="paragraph">
+<p><a id="CHM2"></a>[CHM2] "The Evolution of FORTH, an Unusual Language", Charles H. Moore,
+<em>Byte</em> 1980, <a href="https://wiki.forth-ev.de/doku.php/projects:the_evolution_of_forth" class="bare">https://wiki.forth-ev.de/doku.php/projects:the_evolution_of_forth</a></p>
+</div>
+<div class="paragraph">
+<p><a id="CnR"></a>[CnR] <em>Forth Programmer&#8217;s Handbook</em>, Edward K. Conklin and Elizabeth Rather,
+3rd edition 2010</p>
+</div>
+<div class="paragraph">
+<p><a id="DB"></a>[DB] <em>Forth Enzyclopedia</em>, Mitch Derick and Linda Baker,
+Mountain View Press 1982</p>
+</div>
+<div class="paragraph">
+<p><a id="DH"></a>[DH] "Some notes on Forth from a novice user", Douglas Hoffman, Feb 1988
+<a href="https://wiki.forth-ev.de/doku.php/projects:some_notes_on_forth_from_a_novice_user" class="bare">https://wiki.forth-ev.de/doku.php/projects:some_notes_on_forth_from_a_novice_user</a></p>
+</div>
+<div class="paragraph">
+<p><a id="EnL"></a>[EnL] <em>Programming the 65816, including the 6502, 65C02 and 65802</em>,
+David Eyes and Ron Lichty
+(Currently not available from the WDC website)</p>
+</div>
+<div class="paragraph">
+<p><a id="EW"></a>[EW] "Forth: The Hacker&#8217;s Language", Elliot Williams,
+<a href="https://hackaday.com/2017/01/27/forth-the-hackers-language/" class="bare">https://hackaday.com/2017/01/27/forth-the-hackers-language/</a></p>
+</div>
+<div class="paragraph">
+<p><a id="GK"></a>[GK] "Forth System Comparisons", Guy Kelly, in <em>Forth Dimensions</em> V13N6,
+March/April 1992
+<a href="http://www.forth.org/fd/FD-V13N6.pdf}{http://www.forth.org/fd/FD-V13N6.pdf" class="bare">http://www.forth.org/fd/FD-V13N6.pdf}{http://www.forth.org/fd/FD-V13N6.pdf</a></p>
+</div>
+<div class="paragraph">
+<p><a id="JN"></a>[JN] <em>A Beginner&#8217;s Guide to Forth</em>, J.V. Nobel,
+<a href="http://galileo.phys.virginia.edu/classes/551.jvn.fall01/primer.htm" class="bare">http://galileo.phys.virginia.edu/classes/551.jvn.fall01/primer.htm</a></p>
+</div>
+<div class="paragraph">
+<p><a id="LB1"></a>[LB1] <em>Starting Forth</em>, Leo Brodie, new edition 2003,
+<a href="https://www.forth.com/starting-forth/}{https://www.forth.com/starting-forth/" class="bare">https://www.forth.com/starting-forth/}{https://www.forth.com/starting-forth/</a></p>
+</div>
+<div class="paragraph">
+<p><a id="LB2"></a>[LB2] <em>Thinking Forth</em>, Leo Brodie, 1984,
+<a href="http://thinking-forth.sourceforge.net/\#21CENTURY" class="bare">http://thinking-forth.sourceforge.net/\#21CENTURY</a></p>
+</div>
+<div class="paragraph">
+<p><a id="LL"></a>[LL] <em>6502 Assembly Language Programming</em>, Lance A. Leventhal,
+OSBORNE/McGRAW-HILL 1979</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_colophon">Colophon</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Tali Forth 2 Manual was written with the <a href="https://www.vim.org/">vim</a> editor in
+<a href="https://asciidoctor.org/docs/what-is-asciidoc/">AsciiDoc</a> format, formatted to
+HTML with AsciiDoctor, and version controlled with <a href="https://git-scm.com/">Git</a>, all
+under <a href="https://www.ubuntu.com/">Ubuntu</a> Linux 16.04 LTS.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnote_1">
+<a href="#_footnoteref_1">1</a>. Rumor has it that there was another MPU called "Z80", but it ended up being a mere footnote.
+</div>
+<div class="footnote" id="_footnote_2">
+<a href="#_footnoteref_2">2</a>. If you&#8217;re going to quit anyway, speed can&#8217;t be that important
+</div>
+<div class="footnote" id="_footnote_3">
+<a href="#_footnoteref_3">3</a>. Try reading that last sentence to a friend who isn&#8217;t into computers. Aren&#8217;t abbreviations fun?
+</div>
+<div class="footnote" id="_footnote_4">
+<a href="#_footnoteref_4">4</a>. Though I do wish they would tell us what happened to the quarian ark in <em>Andromeda</em>.
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version BETA<br>
+Last updated 2018-07-04 01:04:15 CEST
+</div>
+</div>
+</body>
+</html>

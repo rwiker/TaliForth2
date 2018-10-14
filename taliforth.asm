@@ -1,7 +1,7 @@
 ; Tali Forth 2 for the 65c02
 ; Scot W. Stevenson <scot.stevenson@gmail.com>
 ; First version: 19. Jan 2014 (Tali Forth)
-; This version: 28. Apr 2018
+; This version: 22. Sep 2018
 
 ; This is the main file for Tali Forth 2
 
@@ -332,8 +332,26 @@ _loop:
                 lda state
                 beq _loop
 
-                ; We're compiling, so there is a bit more work. Note this
-                ; doesn't work with double-cell numbers, only single-cell
+                ; We're compiling, so there is a bit more work.  Check
+                ; status bit 5 to see if it's a single or double-cell
+                ; number.
+                lda #$20
+                bit status
+                beq _single_number
+
+                ; It's a double cell number.  If we swap the
+                ; upper and lower half, we can use the literlal_runtime twice
+                ; to compile it into the dictionary.
+                jsr xt_swap
+                ldy #>literal_runtime
+                lda #<literal_runtime
+                jsr cmpl_subroutine
+                
+                ; compile our number
+                jsr xt_comma
+                
+                ; Fall into _single_number to process the other half.
+_single_number: 
                 ldy #>literal_runtime
                 lda #<literal_runtime
                 jsr cmpl_subroutine
@@ -417,6 +435,27 @@ _line_done:
 
                 rts
 .scend
+
+is_printable:
+.scope
+        ; """Given a character in A, check if it is a printable ASCII
+        ; character in the range from $20 to $7E inclusive. Returns the
+        ; result in the Carry Flag: 0 (clear) is not printable, 1 (set)
+        ; is printable. Keeps A. See 
+        ; http://www.obelisk.me.uk/6502/algorithms.html for a
+        ; discussion of various ways to do this
+                cmp #AscSP              ; $20
+                bcc _done
+                cmp #'~ + 1             ; $7E
+                bcs _failed
+                sec
+                bra _done
+_failed:
+                clc
+_done:       
+                rts
+.scend
+
 
 underflow:
         ; """Landing area for data stack underflow"""

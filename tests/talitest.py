@@ -1,37 +1,28 @@
 #!/usr/bin/python3
-"""Talitest spawns a copy of py65mon running Tali Forth 2 and
-feeds it tests, saving the results.  This script requires pexpect
-(available via pip) and needs to run on a linux system.  The windows
-version of py65mon reads directly from the console rather than
-stdin, and therefore doesn't work with pexpect on Windows (even
-though pexpect is now supported on Windows).
+"""Talitest creates a py65 65C02 emulator running Tali Forth 2 and
+feeds it tests, saving the results.  This script requires py65 version
+1.1.0 or later already be installed (`pip install --upgrade py65`).
 
 RUNNING     : Run talitest.py from the tests directory.
 
-This script takes a long time to run (25 minutes on my system).
-Results will be found in results.txt when finished.  Grep for
-"Undefined" to find words it couldn't run (some of these will be
-from a previous failed compilation).  Grep for "RESULT" to find
-WRONG NUMBER OF RESULTS errors and INCORRECT RESULTS errors.  Note
-that the original error messages show up first.
+Results will be found in results.txt when finished.
 
-PROGRAMMER  : Sam Colwell
+PROGRAMMERS : Sam Colwell and Scot W. Stevenson
 FILE        : talitest.py
 
 First version: 16. May 2018
-This version: 25. June 2018
+This version: 29. July 2018
 """
 
 import argparse
 import sys
-import time
-import pexpect
+import py65.monitor as monitor
+from py65.devices.mpu65c02 import MPU as CMOS65C02
+from py65.memory import ObservableMemory
 
-TESTS = 'talitests.fs'
 TESTER = 'tester.fs'
 RESULTS = 'results.txt'
-DELAY = 0.006  # 6ms default
-SPAWN_COMMAND = 'py65mon -m 65c02 -r ../taliforth-py65mon.bin'
+TALIFORTH_LOCATION = '../taliforth-py65mon.bin'
 PY65MON_ERROR = '*** Unknown syntax:'
 TALI_ERRORS = ['Undefined word',
                'Stack underflow',
@@ -48,18 +39,16 @@ TALI_ERRORS = ['Undefined word',
                'Already in compile mode']
 
 # Add name of file with test to the set of LEGAL_TESTS
-LEGAL_TESTS = frozenset(['core', 'string', 'double', 'facility', 'tali', 'tools'])
+LEGAL_TESTS = ['core', 'string', 'double', 'facility',
+               'stringlong', 'tali', 'tools', 'user', 'cycles']
 TESTLIST = ' '.join(["'"+str(t)+"' " for t in LEGAL_TESTS])
 
 OUTPUT_HELP = 'Output File, default "'+RESULTS+'"'
-DELAY_HELP = 'Delay before send in sec, default '+str(DELAY)+' sec'
 TESTS_HELP = "Available tests: 'all' or one or more of "+TESTLIST
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-b', '--beep', action='store_true',
                     help='Make a sound at end of testing', default=False)
-parser.add_argument('-d', '--delay', type=float,
-                    help=DELAY_HELP, default=DELAY)
 parser.add_argument('-m', '--mute', action='store_true',
                     help='Only print errors and summary', default=False)
 parser.add_argument('-o', '--output', dest='output',
@@ -77,105 +66,157 @@ if (args.tests != ['all']) and (not set(args.tests).issubset(LEGAL_TESTS)):
 if args.tests == ['all']:
     args.tests = list(LEGAL_TESTS)
 
+# Create a string with all of the tests we will be running in it.
+test_string = ""
+test_index = -1
 
-def inform(string):
-    """If the program was not called with the mute argument, print the
-    string, otherwise just return. This is a convenience function.
-    """
-    if not args.mute:
-        print(string)
+# Load the tester first.
+with open(TESTER, 'r') as tester:
+    test_string = tester.read()
 
+# Load all of the tests selected from the command line.
+for test in args.tests:
 
-def sendslow(kid, string):
-    """Slowly send a string to a subprocess using pexpect."""
-    for char in string:
-        # print(char) # For debugging
-        kid.send(char)
+    # Determine the test file name.
+    testfile = test + '.fs'
 
+    with open(testfile, 'r') as infile:
+        # Add a forth comment with the test file name.
+        test_string = test_string +\
+                      "\n ( Running test '{0}' from file '{1}' )\n".\
+                      format(test, testfile)
+        # Add the tests.
+        test_string = test_string + infile.read()
 
-def sendline(kid, string):
-    """Send a line (with newline added) to the simulator, returning
-    results
-    """
-    # print(string) # For debugging
-    sendslow(kid, string + '\n')
-
-    # Look for all of the expected responses.  The errors from the test
-    # suite are not explicitly listed as they end in "ok".
-    # Give up after 1 second.
-    try:
-        kid.expect(['ok\r\n', 'compiled\r\n',
-                    'Undefined word\r\n', 'Stack underflow\r\n'],
-                   timeout=1)
-    except pexpect.TIMEOUT:
-        # Return whatever we collected before the timeout.
-        return kid.before.decode('ascii')
-    else:
-        # Return the text and the response to it.
-        return (kid.before.decode('ascii') +
-                kid.after.decode('ascii')).rstrip()
-
-# Create the py65mon process running Tali Forth 2.
-# Linux Version (Windows version doesn't work with this simulator)
-child = pexpect.spawn(SPAWN_COMMAND)
-
-# Change the default time before each char is sent (default is 3 ms).
-# If it looks like characters from the tests are being dropped
-# by the py65mon emulator, increase the time below.
-child.delaybeforesend = args.delay
-
-# Wait for the "Type 'bye' to exit" prompt.
-inform('Waiting for Tali Forth 2 to initialize...')
-child.expect('to exit\r\n')
-
-# An extra delay is needed or the emulator drops the first few chars
-inform('Waiting a bit more')
-
-time.sleep(3)
+# Have Tali2 quit at the end of all the tests.
+test_string = test_string + "\nbye\n"
 
 # Log the results
 with open(args.output, 'wb') as fout:
 
-    # Send the tester file
-    with open(TESTER, 'r') as infile:
+    # Create a py65 monitor object loaded with Tali Forth 2.
+    class TaliMachine(monitor.Monitor):
+        """Emulator for running Tali Forth 2 test suite"""
 
-        # Using splitlines to get rid of newlines at the end of lines.
-        for line in infile.read().splitlines():
-            results = sendline(child, line)
-            inform(results)
-            fout.write((results + '\n').encode('ascii'))
+        # Used for cycle counting tests.
+        cycle_start = 0
+        cycle_end   = 0
 
-    # Send the suite of tests
-    for test in args.tests: 
-        
-        testfile = test+'.fs'
-        inform('')
-        inform('='*80)
-        inform("Running test '{0}' from file '{1}'".format(test, testfile))
-        inform('')
+        def __init__(self):
+            # Use the 65C02 as the CPU type.
+            # Don't pass along any of the command line arguments.
+            # Don't use the built-in I/O.
+            super().__init__(mpu_type=CMOS65C02,
+                             argv="",
+                             putc_addr=None,
+                             getc_addr=None)
+            # Load our I/O routines that take the tests from a string
+            # and log the results to a file, echoing if not muted.
+            self._install_io()
+            # Load the tali2 binary
+            self.onecmd("load " + TALIFORTH_LOCATION + " 8000")
 
-        with open(testfile, 'r') as infile:
+        def _install_io(self):
 
-            # Using splitlines to get rid of newlines at the end of lines
-            for line in infile.read().splitlines():
-                results = sendline(child, line)
-                inform(results)
+            def getc_from_test(_):
+                """Parameter (originally "address") required by py65mon
+                but unused here as "_"
+                """
+                global test_string, test_index
+                test_index = test_index + 1
 
-                # Detect crashes: py65mon will print an error but this
-                # program will attempt to continue to send new commands
-                if PY65MON_ERROR in results:
-                    print('py65mon error detected -- did we crash?')
-                    sys.exit(1)
+                if test_index < len(test_string):
+                    result = ord(test_string[test_index])
+                else:
+                    result = 0
 
-                fout.write((results + '\n').encode('ascii'))
+                return result
 
-# Shut it all down
-sendslow(child, 'bye\n')
-sendslow(child, 'quit\n')
+            def putc_results(_, value):
+                """First parameter (originally "address") required
+                by py65mon but unused here as "_"
+                """
+                global fout
+                # Save results to file.
+                if value != 0:
+                    fout.write(chr(value).encode())
+
+                # Print to the screen if we are not muted.
+                if not args.mute:
+                    sys.stdout.write(chr(value))
+                    sys.stdout.flush()
+
+            def update_cycle_start(_):
+                """Parameter (originally "address") required by py65mon
+                but unused here as "_"
+                """
+                # When this address is read from, note the cycle time.
+                self.cycle_start = self._mpu.processorCycles
+                return 0
+
+            def update_cycle_end(_):
+                """Parameter (originally "address") required by py65mon
+                but unused here as "_"
+                """
+                # When this address is read from, note the cycle time.
+                self.cycle_end = self._mpu.processorCycles
+#                # Compute the elapsed time (in CPU cycles).
+#                # With a 1MHz clock, this will also be in microseconds.
+#                fout.write((" CYCLES: "+str(self.cycle_end-self.cycle_start)+" ").encode())
+#
+#                # Print to the screen if we are not muted.
+#                if not args.mute:
+#                    sys.stdout.write((" CYCLES: "+str(self.cycle_end-self.cycle_start)+" "))
+#                    sys.stdout.flush()
+
+                return 0
+
+            def read_cycle_count(address):
+                """Break up the 32-bit result into bytes for Tali to
+                read out of virtual memory.  Note that the hex value
+                12345678 is stored in memory as bytes 34 12 78 56.
+                The value will be read (as a double) starting at
+                memory address 0xF008
+                """
+                if address == 0xF008:
+                    return ((self.cycle_end-self.cycle_start)&0x00FF0000)>>16
+                elif address == 0xF009:
+                    return ((self.cycle_end-self.cycle_start)&0xFF000000)>>24
+                elif address == 0xF00A:
+                    return ((self.cycle_end-self.cycle_start)&0x000000FF)
+                elif address == 0xF00B:
+                    return ((self.cycle_end-self.cycle_start)&0x0000FF00)>>8
+                else:
+                    return 0
+
+            # Install the above handlers for I/O
+            mem = ObservableMemory(subject=self.memory)
+            mem.subscribe_to_write([0xF001], putc_results)
+            mem.subscribe_to_read([0xF004], getc_from_test)
+
+            # Install the handlers for timing cycles.
+            mem.subscribe_to_read([0xF006], update_cycle_start)
+            mem.subscribe_to_read([0xF007], update_cycle_end)
+            mem.subscribe_to_read([0xF008, 0xF009, 0xF00A, 0xF00B], read_cycle_count)
+            self._mpu.memory = mem
+
+    # Start Tali.
+    tali = TaliMachine()
+    # Reset vector is $f006.
+    tali._mpu.pc = 0xf006
+    # Run until break detected.
+    tali._run([0x00])
 
 # Walk through results and find stuff that went wrong
+print('\n')
 print('='*80)
 print('Summary:\n')
+
+# Check to see if we crashed before reading all of the tests.
+if test_index < len(test_string) - 1:
+    print("Tali Forth 2 crashed before all tests completed\n")
+else:
+    print("Tali Forth 2 ran all tests requested\n")
 
 # First, stuff that failed due to undefined words
 undefined = []
@@ -188,6 +229,7 @@ with open(args.output, 'r') as rfile:
 
 # We shouldn't have any undefined words at all
 if undefined:
+
     for line in undefined:
         print(line.strip())
 
@@ -204,11 +246,15 @@ with open(args.output, 'r') as rfile:
         if 'INCORRECT RESULT' in line:
             failed.append(line)
 
+        if 'WRONG NUMBER OF RESULTS' in line:
+            failed.append(line)
+
         for error_str in TALI_ERRORS:
             if error_str in line:
                 failed.append(line)
 
 if failed:
+
     for line in failed:
         print(line.strip())
 
@@ -220,4 +266,5 @@ if (not undefined) and (not failed):
 # If we got here, the program itself ran fine one way or another
 if args.beep:
     print('\a')
+
 sys.exit(0)

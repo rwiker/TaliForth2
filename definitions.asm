@@ -1,7 +1,7 @@
 ; Definitions for Tali Forth 2
 ; Scot W. Stevenson <scot.stevenson@gmail.com>
 ; First version: 01. Apr 2016 (Liara Forth)
-; This version: 06. Jun 2018
+; This version: 02. Jul 2018
 
 ; This file is included by taliforth.asm
 
@@ -128,6 +128,8 @@
                            ;         WORKWORD contains nt of word being compiled
                            ;       = 0 for :NONAME definitions
                            ;         WORKWORD contains xt of word being compiled
+                           ; Bit 5 = 1 for NUMBER returning a double word
+                           ;       = 0 for NUMBER returning a single word
                            ; Bit 3 = 1 makes CTRL-n recall current history
                            ;       = 0 CTRL-n recalls previous history
                            ; Bit 2 = Current history buffer msb
@@ -164,6 +166,7 @@
 .alias IM 4  ; Immediate Word
 .alias NN 8  ; Never Native Compile
 .alias UF 16 ; Includes Underflow Check (RESERVED)
+.alias HC 32 ; Word has Code Field Area (CFA)
 
 
 ; VARIOUS

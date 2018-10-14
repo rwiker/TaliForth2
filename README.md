@@ -1,9 +1,10 @@
 # Tali Forth 2 for the 65c02  
 Scot W. Stevenson <scot.stevenson@gmail.com>   
 First version: 19. Jan 2014 (original Tali Forth)  
-This version: 01. May 2018 
+This version: 04. Jul 2018 
 
-**(THIS IS AN ALPHA VERSION OF TALI FORTH. SOME THINGS DON'T WORK)**
+**This is a BETA version of Tali Forth. This means that everything here should
+work, but probably doesn't.**
 
 ## Dude, I am the very model of a Salarian scientist, just let me start!
 
@@ -12,7 +13,7 @@ Run `py65mon -m 65c02 -r taliforth-py65mon.bin` from this directory.
 
 ## Introduction
 
-Tali Forth 2 is a subroutine threaded code (STC) implementation of an ANSI-based
+Tali Forth 2 is a subroutine threaded code (STC) implementation of an ANS-based
 Forth for the 65c02 8-bit MPU. The aim is to provide a modern Forth that is easy
 to get started with and can be ported to individial hardware projects,
 especially Single Board Computers (SBC), with little effort. It is free --
@@ -45,7 +46,7 @@ Tali Forth 2 aims to be, roughly in order of priority:
 - **Standardized**. Most Forths available for the 65c02 are based on ancient,
   outdated templates such as FIG Forth. Learning Forth with them is like trying
   to learn modern English by reading Chaucer. Tali Forth (mostly) follows the
-  current ANSI Standard. 
+  current ANS Standard. 
   
 The functional reference for Tali is GNU Forth (Gforth,
 [https://www.gnu.org/software/gforth/](https://www.gnu.org/software/gforth/)).
@@ -62,7 +63,7 @@ parts of their internal logic.
 
 ## Seriously super lots more detail 
 
-See `docs\manual.pdf` for the Tali Forth manual, which covers the installation,
-setup and internal structure. The central discussion forum is
+See `docs\manual.html` for the Tali Forth manual, which covers the
+installation, setup and internal structure. The central discussion forum is
 [http://forum.6502.org/viewtopic.php?f=9&t=2926](http://forum.6502.org/viewtopic.php?f=9&t=2926)
 at 6502.org.
